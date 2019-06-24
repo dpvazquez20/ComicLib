@@ -1,0 +1,11 @@
+/* LOGIN AND SIGN IN PAGE (index.html) */
+
+/* Background wallpaper */
+body {
+	background-image: url("/images/login.png");
+    background-color: #17a2b8;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}

@@ -1,0 +1,6 @@
+/* Custom styles that are in all comics pages (/templates/comics) */
+
+/* Pencil icon in the modify buttons */
+.fa-pencil-alt {
+	color: white;
+}
