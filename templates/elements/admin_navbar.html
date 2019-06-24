@@ -1,0 +1,91 @@
+<!-- Navbar used by the admin user -->
+
+
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+
+    <!-- Brand -->
+    <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["return_home"] }}">
+        <a class="navbar-brand font-weight-bold" href="/home">
+            <img src="images/icon.png" height="40" width="60" class="d-inline-block align-center" alt="">
+            ComicLib
+        </a>
+    </span>
+
+    <!-- Toggle button -->
+    <button class="btn btn-outline-secondary navbar-toggler" id="navbarToggle" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar body (this part will collapse in small screens) -->
+    <div class="collapse navbar-collapse" id="navbar">
+        <ul class="navbar-nav mr-auto">
+
+            <!-- Admin links -->
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" href="/users"> {{ lang["users"] }} </a>                <!-- User management page -->
+            </li>
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" href="/authors"> {{ lang["authors"] }} </a>            <!-- Comic authors management page -->
+            </li>
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" href="/comics"> {{ lang["comics"] }} </a>                     <!-- Comic management page -->
+            </li>
+
+        </ul>
+    </div>
+
+    <!-- User part -->
+    <ul class="nav">
+
+        <!-- Change language select -->
+        <span data-toggle="tooltip" data-placement="left" title="{{ lang["change_lang"] }}">
+            <li class="nav-item">
+                <form action="/lang" method="post" role="form">
+                    <select class="selectpicker show-tick mt-2" name="lang" data-width="fit" id="language_select" onchange="this.form.submit()">
+                        {% if lang["html_lang"] == "es" %}      <!-- If the language is spanish displays first the spanish ticked -->
+                            <!-- Spanish -->
+                            <option value="spa" data-content="<img class='rounded' src='images/flags/spain.png' height=25 width=30>"></option>
+                            <!-- English -->
+                            <option value="eng" data-content="<img class='rounded' src='images/flags/great_britain.png' height=25 width=30>"></option>
+                        {% elif lang["html_lang"] == "en" %}    <!-- If the language is english displays first the english ticked -->
+                            <!-- English -->
+                            <option value="eng" data-content="<img class='rounded' src='images/flags/great_britain.png' height=25 width=30>"></option>
+                            <!-- Spanish -->
+                            <option value="spa" data-content="<img class='rounded' src='images/flags/spain.png' height=25 width=30>"></option>
+                        {% else %}                              <!-- If the language is other one displays first the english ticked -->
+                            <!-- English -->
+                            <option value="eng" data-content="<img class='rounded' src='images/flags/great_britain.png' height=25 width=30>"></option>
+                            <!-- Spanish -->
+                            <option value="spa" data-content="<img class='rounded' src='images/flags/spain.png' height=25 width=30>"></option>
+                        {% endif %}
+                    </select>
+                </form>
+            </li>
+        </span>
+
+        <!-- User dropdown menu -->
+        <span data-toggle="tooltip" data-placement="left" title="{{ lang["user_menu"] }}">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">								<!-- Profile picture and user name -->
+                    <strong class="text-light mx-1"> {{ session_name }} </strong>                <!-- User name -->
+                    {% if session_picture != None %}                                        <!-- User picture -->
+                        <img src="data:image/png;base64,{{ session_picture.encode('base64') }}" class="rounded-circle border border-light bg-light" alt="Image" height="40" width="40">
+                    {% else %}                                                              <!-- Default picture -->
+                        <img src="images/profile.png" class="rounded-circle border border-light bg-light" alt="Image" height="40" width="40">
+                    {% endif %}
+                </a>
+                <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">		<!-- Dropdown user menu -->
+                    <a class="dropdown-item text-light" href="/profile"> {{ lang["profile"] }} </a><!-- User profile page -->
+                    <div class="dropdown-divider border border-light"></div>
+                    <a class="dropdown-item text-light" href="/logout">                     <!-- Logout button -->
+                        {{ lang["sign_out"] }}
+                        <i class="fas fa-power-off fa-lg"></i>
+                    </a>
+                </div>
+            </li>
+        </span>
+
+    </ul>
+    <!-- End of user part -->
+
+</nav>

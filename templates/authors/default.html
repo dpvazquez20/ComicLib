@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["authors_title"] }} </title>
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/authors.js"></script>
+
+    <!-- Additional CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/authors.css"/>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% include "elements/admin_navbar.html" %}      <!-- Admin navbar -->
+
+	<!-- Main body -->
+	<div class="container">
+
+        <!-- Order and search fields -->
+        {% include "authors/order_search.html" %}
+
+        <hr>
+		<!-- Error message -->
+        {% if error_message %}
+            {% include "elements/error_message.html" %}
+        {% endif %}
+
+        <!-- Ok message -->
+        {% if ok_message %}
+            {% include "elements/ok_message.html" %}
+        {% endif %}
+
+        <!-- Main buttons -->
+        <div class="row justify-content-around">
+
+            <!-- Add button -->
+            <span data-toggle="tooltip" data-placement="left" title="{{ lang["add_author"] }}">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create_modal">
+                     {{ lang["add"] }} &nbsp
+                    <i class="fas fa-plus"></i>
+                </button>
+            </span>
+
+            {% if authors and authors|length > 0 %}
+            <!-- Delete page button -->
+                <span data-toggle="tooltip" data-placement="right" title="{{ lang["delete_page_tooltip"] }}">
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#delete_page_modal">
+                         {{ lang["delete_page"] }} &nbsp
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </span>
+
+                {% include "authors/delete_all.html" %}
+            {% endif %}
+
+        </div>
+		<hr>
+
+        <!-- Add author modal (form) -->
+        {% include "authors/add.html" %}
+
+        <!-- Elements per page and pagination -->
+        <div class="col-md-12">
+            <div class="row justify-content-between">
+
+                <!-- Pagination -->
+                {% if pages and pages|length > 1 %}
+                    {% include "authors/pagination.html" %}
+                {% endif %}
+
+                <!-- Elements per page -->
+                {% include "authors/elems_per_page.html" %}
+
+            </div>
+        </div>
+
+
+        <!-- Authors list (Two columns per page) -->
+		{% if authors and authors|length > 0 %}
+            <ul class="list-group mt-2 mb-3">
+                <div class="row justify-content-between">
+
+                    <!-- Author columns -->
+                    {% for author in authors %}
+                        <!-- Delete author confirmation modal -->
+                        {% include "authors/delete.html" %}
+
+                        <!-- Modify author modal (form) -->
+                        {% include "authors/modify.html" %}
+
+                        <div class="col-md-6 mt-2">
+                            <li class="list-group-item list-group-item-action">
+                                <div class="row">
+                                    <div class="col-md-9 mt-1"> 				<!-- Author attributes (name) -->
+                                        <strong> {{ author.name }} </strong>
+                                    </div>
+                                    <div class="col-md-3">			            <!-- Author buttons -->
+                                        <span data-toggle="tooltip" data-placement="top" title="{{ lang["delete_author"] }}">             <!-- Delete button -->
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ author.key.urlsafe() }}">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </span>
+                                        <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["modify_author"] }}">             <!-- Modify button -->
+                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modifyModal{{ author.key.urlsafe() }}">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                        </div>
+                    {% endfor %}
+                    <!-- End of element column -->
+
+                </div>
+            </ul>
+        {% endif %}
+
+        <!-- Bottom pagination -->
+        {% if pages and pages|length > 1 %}
+        <div class="col-md-12 mb-4">
+            <div class="row justify-content-end">
+
+                <!-- Pagination -->
+                {% include "authors/pagination.html" %}
+
+            </div>
+        </div>
+        {% endif %}
+
+	</div>
+	<!-- End of main body -->
+
+</body>
+</html>

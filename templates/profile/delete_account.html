@@ -1,0 +1,77 @@
+<!-- Delete account content -->
+
+
+<div class="tab-pane fade mt-5" id="nav-delete-account" role="tabpanel" aria-labelledby="nav-delete-account-tab">
+
+    <!-- Delete button -->
+    <span data-toggle="tooltip" data-placement="top" title="{{ lang["delete_account_tooltip"] }}">
+        {% if session_role == "admin" %}
+            <button type="button" class="btn btn-primary btn-lg mt-5" data-toggle="modal" data-target="#deleteAccountModal">
+        {% else %}
+            <button type="button" class="btn btn-info btn-lg mt-5" data-toggle="modal" data-target="#deleteAccountModal">
+        {% endif %}
+                {{ lang["delete_account"] }}
+                <i class="fas fa-trash-alt"></i>
+            </button>
+    </span>
+
+    <!-- Delete modal -->
+    <div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="Delete modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                    <!-- Delete modal header -->
+                    <div class="modal-header justify-content-center">
+                        <h4 class="modal-title"> {{ lang["confirmation"] }} </h4>
+                    </div>
+
+                    <!-- Delete modal body -->
+                    <div class="modal-body my-3">
+                        <h6 class="text-center">
+
+                            {% if user_genre == "male" %}
+                                {{ lang["delete_account_confirmation_male"] }}
+                            {% elif user_genre == "female" %}
+                                {{ lang["delete_account_confirmation_female"] }}
+                            {% else %}
+                                {{ lang["delete_account_confirmation_not_defined"] }}
+                            {% endif %}
+
+                        </h6>
+
+                        <!-- Delete form -->
+                        <form class="form" action="/profile_delete_account" method="post">
+                            <!-- Delete form buttons -->
+                            {% if session_role == "admin" %}
+                                <div class="mt-5 text-center">  <!-- Admin buttons -->
+                                    <button type="submit" class="btn btn-success" name="key" value="{{ user_key }}">
+                                        {{ lang["accept"] }}
+                                        <i class="fas fa-check fa-sm"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                        {{ lang["cancel"] }}
+                                        <i class="fas fa-times fa-sm"></i>
+                                    </button>
+                                </div>
+                            {% else %}
+                                <div class="mt-5 text-center">  <!-- Client buttons -->
+                                    <button type="submit" class="btn btn-info" name="key" value="{{ user_key }}">
+                                        {{ lang["accept"] }}
+                                        <i class="fas fa-check fa-sm"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">
+                                        {{ lang["cancel"] }}
+                                        <i class="fas fa-times fa-sm"></i>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </form>
+                        <!-- End of delete form -->
+
+                    </div>
+                    <!-- End of delete modal body -->
+            </div>
+        </div>
+    </div>
+    <!-- End of delete modal -->
+</div>

@@ -1,0 +1,278 @@
+<!-- Modal used by the admin to modify users -->
+
+<!-- Modal -->
+<div class="modal fade" id="modifyModal{{ user.key.urlsafe() }}" tabindex="-1" role="dialog" aria-labelledby="modify_modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title" id="ModifyModalLongTitle">  <!-- Title -->
+                    {{ lang["modify_user"] }}
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <form class="form" method="post" enctype="multipart/form-data" action="/users_modify" id="modify_form" role="form" onsubmit="return validate_fields2()">
+                    <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Users list -->
+                    <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Users keys that are in the current page -->
+
+                    <!-- Email input -->
+                    <div class="form-group">
+                        <div>
+                            <!-- Email label -->
+                            <strong> {{ lang["email"] }} </strong>
+                            <!-- Email tooltip (question icon) -->
+                            <label for="m_email" class="col-sm-1 col-form-label">
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg ml-1 text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["email_tooltip2"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Email input field -->
+                        <input name="m_email" type="email" class="form-control" id="m_email" aria-describedby="m_emailHelpBlock" placeholder="{{ user.email }}">
+
+                        <!-- Email help text(below form field) -->
+                        <div>
+                            <small id="m_emailHelpBlock" class="form-text text-muted">
+                                <em> &nbsp {{ lang["optional_field"] }} </em>
+                            </small>
+                        </div>
+                    </div><hr>
+
+                    <!-- Password input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="m_password" class="col-form-label">
+                                <!-- Genre name label -->
+                                <strong> {{ lang["password"] }} </strong>
+                            </label>
+                        </div>
+
+                        <div class="row">
+                            <!-- Password tooltip (question icon) -->
+                            <label for="m_password" class="col-sm-1 col-form-label">
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg ml-1 text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["password_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                            <!-- Password input field -->
+                            <div class="col-sm-5">
+                                <input name="m_password" type="password" class="form-control" id="m_password" pattern=".{8,20}" maxlength="20" aria-describedby="passwordHelpBlock" title="{{ lang["between8-20"] }}" placeholder=".........">
+                                <!-- Error message if the password and repeat password aren't equals -->
+                                <div class="invalid-feedback">
+                                    &nbsp {{ lang["invalid_password"] }}
+                                </div>
+                            </div>
+                            <!-- Repeat password tooltip (question icon) -->
+                            <label for="m_r_password" class="col-sm-1 col-form-label text-primary">
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg ml-1" data-toggle="tooltip" data-placement="top" title="{{ lang["repeat_password_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                            <!-- Repeat password input field -->
+                            <div class="col-sm-5">
+                                <input name="m_r_password" type="password" class="form-control" id="m_r_password" pattern=".{8,20}" maxlength="20" aria-describedby="m_passwordHelpBlock" title="{{ lang["between8-20"] }}" placeholder=".........">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <!-- Help text (below password field) -->
+                            <small id="m_passwordHelpBlock" class="form-text text-muted">
+                                <em> &nbsp {{ lang["optional_field"] }} </em>
+                            </small>
+
+                            <!-- Show password button -->
+                            <div class="custom-control custom-checkbox mt-1 ml-2">
+                                <input type="checkbox" class="custom-control-input" id="m_show_pass2" onclick="show_passwords2()">
+                                <label class="custom-control-label" for="m_show_pass2">
+                                    {{ lang["show_pass2"] }}
+                                </label>
+                            </div>
+                        </div>
+                    </div><hr>
+
+                    <!-- User name input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="m_username" class="col-form-label">
+                                <!-- User name label -->
+                                <strong> {{ lang["name"] }} </strong>
+                                <!-- User name tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["user_name_tooltip2"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- User name input field -->
+                        <input name="m_username" type="text" class="form-control" id="m_username" maxlength="20" aria-describedby="m_usernameHelpBlock" placeholder="{{ user.name }}">
+
+                        <!-- Error message if the username has more than 20 characters -->
+                        <div class="invalid-feedback">
+                            &nbsp {{ lang["invalid_user_name"] }}
+                        </div>
+
+                        <!-- User name help text (below user name field) -->
+                        <small id="m_usernameHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["user_name_help_text"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Genre radio buttons -->
+                    <div class="form-group">
+                        <div>
+                            <label for="m_genre" class="col-form-label">
+                                <!-- Genre name label -->
+                                <strong> {{ lang["genre"] }} </strong>
+                                <!-- Genre tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg ml-1 text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["genre_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Genre help text -->
+                        <div class="row justify-content-around">
+                            {% if user.genre == "male" %}
+                                <!-- Man radio button -->
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="m_man_radio" name="m_genre" class="custom-control-input" value="male" aria-describedby="m_genreHelpBlock">
+                                    <label class="custom-control-label" for="m_man_radio"> <strong> {{ lang["male"] }} </strong> </label>
+                                </div>
+                                <!-- Woman radio button -->
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="m_woman_radio" name="m_genre" class="custom-control-input" value="female" aria-describedby="m_genreHelpBlock">
+                                    <label class="custom-control-label" for="m_woman_radio"> {{ lang["female"] }} </label>
+                                </div>
+                            {% elif user.genre == "female" %}
+                                <!-- Man radio button -->
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="m_man_radio" name="m_genre" class="custom-control-input" value="male" aria-describedby="m_genreHelpBlock">
+                                    <label class="custom-control-label" for="m_man_radio"> {{ lang["male"] }} </label>
+                                </div>
+                                <!-- Woman radio button -->
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="m_woman_radio" name="m_genre" class="custom-control-input" value="female" aria-describedby="m_genreHelpBlock">
+                                    <label class="custom-control-label" for="m_woman_radio"> <strong> {{ lang["female"] }} </strong> </label>
+                                </div>
+                            {% else %}
+                                <!-- Man radio button -->
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="m_man_radio" name="m_genre" class="custom-control-input" value="male" aria-describedby="m_genreHelpBlock">
+                                    <label class="custom-control-label" for="m_man_radio">  {{ lang["male"] }} </label>
+                                </div>
+                                <!-- Woman radio button -->
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="m_woman_radio" name="m_genre" class="custom-control-input" value="female" aria-describedby="m_genreHelpBlock">
+                                    <label class="custom-control-label" for="m_woman_radio"> {{ lang["female"] }} </label>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Genre help text (below radio buttons) -->
+                        <div class="col-sm-12">
+                            <small id="m_genreHelpBlock" class="form-text text-muted text-center">
+                                <em> {{ lang["optional_field"] }} </em>
+                            </small>
+                        </div>
+                    </div><hr>
+
+                    <!-- Role radio buttons -->
+                    <div class="form-group">
+                        <div>
+                            <label for="m_role" class="col-form-label">
+                                <!-- Role label -->
+                                <strong> {{ lang["role"] }} </strong>
+                                <!-- Role tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["role_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Role input fields -->
+                        <div class="row justify-content-around">
+                            {% if user.role == "admin" %}
+                                <!-- Admin radio button -->
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="m_admin_radio" name="m_role" class="custom-control-input" value="male" aria-describedby="m_roleHelpBlock">
+                                    <label class="custom-control-label" for="m_admin_radio"> <strong> {{ lang["admin"] }} </strong> </label>
+                                </div>
+                                <!-- Client radio button -->
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="m_client_radio" name="m_role" class="custom-control-input" value="female" aria-describedby="m_roleHelpBlock">
+                                    <label class="custom-control-label" for="m_client_radio"> {{ lang["client"] }} </label>
+                                </div>
+                            {% elif user.role == "client" %}
+                                <!-- Admin radio button -->
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="m_admin_radio" name="m_role" class="custom-control-input" value="male" aria-describedby="m_roleHelpBlock">
+                                    <label class="custom-control-label" for="m_admin_radio"> {{ lang["admin"] }} </label>
+                                </div>
+                                <!-- Client radio button -->
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="m_client_radio" name="m_role" class="custom-control-input" value="female" aria-describedby="m_roleHelpBlock">
+                                    <label class="custom-control-label" for="m_client_radio"> <strong> {{ lang["client"] }} </strong> </label>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Role help text (below radio buttons) -->
+                        <div class="col-sm-12">
+                            <small id="m_roleHelpBlock" class="form-text text-muted text-center">
+                                <em> {{ lang["optional_field"] }} </em>
+                            </small>
+                        </div>
+                    </div><hr>
+
+                    <!-- Picture input -->
+                    <div class="form-group">
+                        <div>
+                            <!-- Picture label -->
+                            <strong> {{ lang["picture"] }} </strong>
+                            <!-- Picture tooltip (question icon) -->
+                            <label for="m_picture" class="col-form-label">
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["picture_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Picture input field -->
+                        <div class="custom-file">
+                            <input type="file" accept="image/*" class="custom-file-input" id="m_picture" name="m_picture" aria-describedby="m_pictureHelpBlock">
+                            {% if user.picture and user.picture != None %}
+                                <label class="custom-file-label" for="m_picture" data-browse="{{ lang["browse"] }}"> {{ lang["picture"] }} </label>
+                            {% else %}
+                                <label class="custom-file-label" for="m_picture" data-browse="{{ lang["browse"] }}"> {{ lang["none"] }} </label>
+                            {% endif %}
+                        </div>
+
+                        <!-- Picture help text (below user name field) -->
+                        <small id="m_pictureHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["optional_field"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Form buttons -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success" name="key" value="{{ user.key.urlsafe() }}">    <!-- Submit button -->
+                            {{ lang["accept"] }}
+                            <i class="fas fa-check fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-danger" data-dismiss="modal">       <!-- Cancel button -->
+                            {{ lang["cancel"] }}
+                            <i class="fas fa-times fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-secondary">                         <!-- Reset button -->
+                            {{ lang["restore"] }}
+                            <i class="fas fa-redo-alt fa-sm"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

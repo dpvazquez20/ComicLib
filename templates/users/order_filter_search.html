@@ -1,0 +1,62 @@
+<!-- Order, search and filter fields used by the admin to simplify the search of an user -->
+
+
+<!-- Order, search and filter fields -->
+<div class="col-md-12">
+    <div class="row justify-content-between mb-4">
+
+        <!-- Order field -->
+        <div class="mt-4">
+            <form action="/users_order" method="post" role="form">
+                <input name="all_keys" value="{{ all_keys }}" style="display: none">        <!-- Users list -->
+                <select name="order_by" class="selectpicker" id="order" title="{{ lang["order"] }}" onchange="this.form.submit()">
+                    <option value="name"> {{ lang["name_ascendant"] }} </option>
+                    <option value="-name"> {{ lang["name_descendant"] }} </option>
+                    <option value="email"> {{ lang["emailAZ"] }} </option>
+                    <option value="-email"> {{ lang["emailZA"] }} </option>
+                </select>
+            </form>
+        </div>
+
+        <!-- Filter field -->
+        <div class="mt-4">
+            <form class="form-inline" action="/users_filter" method="post" role="form">
+                <input name="all_keys" value="{{ all_keys }}" style="display: none">        <!-- Users list -->
+                <select name="filter_by[]" class="selectpicker" id="filter" title="{{ lang["filter"] }}" multiple>
+                    <optgroup label="{{ lang["genre"] }}" data-max-options="1">
+                        <option value="male"> {{ lang["male"] }} </option>
+                        <option value="female"> {{ lang["female"] }} </option>
+                        <option value="not_defined"> {{ lang["not_defined"] }} </option>
+                    </optgroup>
+                    <optgroup label="{{ lang["role"] }}" data-max-options="1">
+                        <option value="admin"> {{ lang["admin"] }} </option>
+                        <option value="client"> {{ lang["client"] }} </option>
+                    </optgroup>
+                </select>
+                <button type="submit" class="btn btn-light ml-1">
+                    <i class="fas fa-filter fa-sm text-secondary"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Search field -->
+        <div class="mt-4">
+            <form action="/users_search" method="post" role="form">
+                <select name="search" class="selectpicker" id="{{ lang["search_not_results"] }}" data-live-search="true" title="{{ lang["search..."] }}" data-size="5">
+                    {% if all_users and all_users|length > 0 %}
+                        {% for user in all_users %}
+                            <option value="{{ user.key.urlsafe() }}" data-tokens="{{ user.name or user.name|lower or user.name|upper or user.name|title }}">
+                                {{ user.name }}
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <button type="submit" class="btn btn-light">
+                    <i class="fas fa-search fa-sm text-secondary"></i>
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+<!-- End of filter, order and search field -->

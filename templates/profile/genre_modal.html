@@ -1,0 +1,86 @@
+<!-- Modify genre modal -->
+<div class="modal fade" id="modifyGenreModal" tabindex="-1" role="dialog" aria-labelledby="Modify modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+                <!-- Modify genre modal header -->
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title"> {{ lang["modify_genre"] }} </h4>
+                </div>
+
+                <!-- Modify genre body -->
+                <div class="modal-body my-3">
+
+                    <!-- Modify genre form -->
+                    <form role="form" action="/profile_modify_genre" method="post" onsubmit="validate_genre(this)">
+                        <!-- Sign in genre radio buttons -->
+                        <div class="form-group row">
+                            <div class="col-sm-1">
+                                <span id="help">                                                            <!-- Genre tooltip (question icon) -->
+                                    {% if session_role == "admin" %}
+                                        <i class="fas fa-question-circle fa-lg ml-1 text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["genre_tooltip"] }}"></i>
+                                    {% else %}
+                                        <i class="fas fa-question-circle fa-lg ml-1 text-info" data-toggle="tooltip" data-placement="top" title="{{ lang["genre_tooltip"] }}"></i>
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <div class="col-sm-11">
+                                <div class="row justify-content-around">
+                                    <div class="custom-control custom-radio custom-control-inline">         <!-- Man radio button -->
+                                        <input type="radio" id="man_radio" name="genre" class="custom-control-input" value="male" aria-describedby="genreHelpBlock" onblur="validate_genre(this)">
+                                        <label class="custom-control-label" for="man_radio"> {{ lang["male"] }} </label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">         <!-- Woman radio button -->
+                                        <input type="radio" id="woman_radio" name="genre" class="custom-control-input" value="female" aria-describedby="genreHelpBlock">
+                                        <label class="custom-control-label" for="woman_radio"> {{ lang["female"] }} </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <small id="genreHelpBlock" class="form-text text-muted text-center">        <!-- Genre help text (below radio buttons) -->
+                                    <em> {{ lang["genre_help_text"] }} </em>
+                                </small>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="mt-4 text-center">		<!-- Modify genre form buttons -->
+                            {% if session_role == "admin" %}
+                                <button type="submit" class="btn btn-success" name="key" value="{{ user_key }}">
+                                    {{ lang["accept"] }}
+                                    <i class="fas fa-check fa-sm"></i>
+                                </button>
+                                <button type="reset" class="btn btn-danger" data-dismiss="modal">
+                                    {{ lang["cancel"] }}
+                                    <i class="fas fa-times fa-sm"></i>
+                                </button>
+                                <button type="reset" class="btn btn-secondary">
+                                    {{ lang["restore"] }}
+                                    <i class="fas fa-redo-alt fa-sm"></i>
+                                </button>
+                            {% else %}
+                                <button type="submit" class="btn btn-info" name="key" value="{{ user_key }}">
+                                    {{ lang["accept"] }}
+                                    <i class="fas fa-check fa-sm"></i>
+                                </button>
+                                <button type="reset" class="btn btn-outline-info" data-dismiss="modal">
+                                    {{ lang["cancel"] }}
+                                    <i class="fas fa-times fa-sm"></i>
+                                </button>
+                                <button type="reset" class="btn btn-outline-info">
+                                    {{ lang["restore"] }}
+                                    <i class="fas fa-redo-alt fa-sm"></i>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </form>
+                    <!-- End of modify genre form -->
+
+                </div>
+                <!-- End of modify genre modal body -->
+        </div>
+    </div>
+</div>
+<!-- End of modify genre modal -->

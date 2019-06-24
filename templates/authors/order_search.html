@@ -1,0 +1,39 @@
+<!-- Order and search fields used by the admin to simplify the search of an author -->
+
+
+<!-- Order and search fields -->
+<div class="col-md-12">
+    <div class="row justify-content-between mb-4">
+
+        <!-- Order field -->
+        <div class="mt-4">
+            <form action="/authors_order" method="post" role="form">
+                <input name="all_keys" value="{{ all_keys }}" style="display: none">        <!-- Authors list -->
+                <select name="order_by" class="selectpicker" id="order" title="{{ lang["order"] }}" onchange="this.form.submit()">
+                    <option value="name"> {{ lang["name_ascendant"] }} </option>
+                    <option value="-name"> {{ lang["name_descendant"] }} </option>
+                </select>
+            </form>
+        </div>
+
+        <!-- Search field -->
+        <div class="mt-4">
+            <form action="/authors_search" method="post" role="form">
+                <select name="search" class="selectpicker" id="{{ lang["search_not_results"] }}" data-live-search="true" title="{{ lang["search..."] }}" data-size="5">
+                    {% if all_authors and all_authors|length > 0 %}
+                        {% for author in all_authors %}
+                            <option value="{{ author.key.urlsafe() }}" data-tokens="{{ author.name or author.name|lower or author.name|upper or author.name|title }}">
+                                {{ author.name }}
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <button type="submit" class="btn btn-light">
+                    <i class="fas fa-search fa-sm text-secondary"></i>
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+<!-- End of filter, order and search field -->

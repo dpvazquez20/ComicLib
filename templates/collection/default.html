@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["collection_title"] }} </title>
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/collection.js"></script>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% include "elements/client_navbar.html" %}      <!-- Client navbar -->
+
+	<!-- Main body -->
+	<div class="container">
+
+        <!-- Order and search fields -->
+        {% include "collection/order_filter_search.html" %}
+
+        <hr>
+
+        <!-- Filter message -->
+        {% if filter_message %}
+            {% include "collection/filter_message.html" %}
+        {% endif %}
+
+        <!-- Main button -->
+        {% if comics and comics|length > 0 %}
+            <div class="row justify-content-around">
+                <!-- Quit page button -->
+                <span data-toggle="tooltip" data-placement="right" title="{{ lang["quit_page_tooltip"] }}">
+                    <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#quit_page_modal">
+                         {{ lang["quit_page"] }} &nbsp
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </span>
+
+                <!-- Quit all modal -->
+                {% include "collection/quit_all.html" %}
+
+                <!-- Error message -->
+                {% if error_message %}
+                    <div aria-live="assertive" aria-atomic="true" style="position: relative; min-height: 200px;">
+                        {% include "collection/error_snackbar.html" %}
+                    </div>
+                {% endif %}
+
+                <!-- Ok message -->
+                {% if ok_message %}
+                    <div aria-live="polite" aria-atomic="true">
+                        {% include "collection/ok_snackbar.html" %}
+                    </div>
+                {% endif %}
+            </div>
+            <hr>
+        {% endif %}
+
+        <!-- Elements per page and pagination -->
+        <div class="col-md-12">
+            <div class="row justify-content-between">
+
+                <!-- Pagination -->
+                {% if pages and pages|length > 1 %}
+                    {% include "collection/pagination.html" %}
+                {% endif %}
+
+                <!-- Elements per page -->
+                {% include "collection/elems_per_page.html" %}
+
+            </div>
+        </div>
+
+        <!-- User search modal -->
+        {% include "collection/user_search.html" %}
+
+        <!-- Comics list (Two columns per page) -->
+        {% if comics and comics|length > 0 %}
+            <div class="row mb-3">
+
+                <!-- Comics columns -->
+                {% for comic in comics %}
+
+                    <!-- Delete comic confirmation modal -->
+                    {% include "collection/quit.html" %}
+
+                    <!-- See comic modal (form) -->
+                    {% include "collection/see.html" %}
+
+
+                    <div class="col-md-2">
+                    <!-- Comic -->
+                        <div class="card mt-3">
+                            {% if comic.cover and comic.cover != None %}                                                    <!-- Comic picture -->
+                                <img src="data:image/png;base64,{{ comic.cover.encode('base64') }}" class="card-img-top" alt="Image">
+                            {% else %}                                                                                      <!-- Default picture -->
+                                <img src="../../images/comic.jpg" class="card-img-top" alt="Image">
+                            {% endif %}
+
+                            <div class="card-body">
+                                <h6 class="card-title"> <!-- Comic title -->
+                                    {{ comic.title }}
+                                </h6>
+                                <p class="card-text">
+                                    <small> {{ lang[comic.type] }} </small> <br>     <!-- Comic type -->
+                                    <small> {{ lang[comic.origin] }} </small> <br>   <!-- Comic origin -->
+                                </p>
+                            </div>
+
+                            <!-- Comic buttons -->
+                            <div class="card-footer text-center">
+                                <div class="row justify-content-around">
+                                    <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["quit_comic"] }}">                 <!-- Quit button -->
+                                        <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#quitModal{{ comic.key.urlsafe() }}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </span>
+
+                                    {% if comic.is_read %}
+                                        <form role="form" action="/collection_unread" method="post">                                         <!-- Read comic -->
+                                            <input type="text" value="unread" name="state" style="display:none">                   <!-- Value to modify -->
+                                            <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Comics list -->
+                                            <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Comics keys that are in the current page -->
+                                            <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["read_comic"] }}">
+                                                <button type="submit" class="btn btn-light btn-sm border border-secondary" name="comic_key" value="{{ comic.key.urlsafe() }}">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </span>
+                                        </form>
+                                    {% else %}
+                                        <form role="form" action="/collection_read" method="post">                                           <!-- Unread comic -->
+                                            <input type="text" value="read" name="state" style="display:none">                     <!-- Value to modify -->
+                                            <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Comics list -->
+                                            <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Comics keys that are in the current page -->
+                                            <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["unread_comic"] }}">
+                                                <button type="submit" class="btn btn-light btn-sm border border-secondary" name="comic_key" value="{{ comic.key.urlsafe() }}">
+                                                    <i class="fas fa-eye-slash"></i>
+                                                </button>
+                                            </span>
+                                        </form>
+                                    {% endif %}
+
+                                    <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["see_comic"] }}">                     <!-- See button -->
+                                        <button type="button" class="btn btn-outline-primary btn-sm btn-block" data-toggle="modal" data-target="#seeModal{{ comic.key.urlsafe() }}">
+                                            <i class="fas fa-info"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- End of comic -->
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% else %}
+            <h2 class="mt-3"> {{ lang["not_comics_yet"] }} </h2>
+        {% endif %}
+        <!-- Element column -->
+
+        <!-- Bottom pagination -->
+        {% if pages and pages|length > 1 %}
+        <div class="col-md-12 mt-3">
+            <div class="row justify-content-end">
+
+                <!-- Pagination -->
+                {% include "collection/pagination.html" %}
+
+            </div>
+        </div>
+        {% endif %}
+
+	</div>
+    <!-- End of main body -->
+
+</body>
+</html>

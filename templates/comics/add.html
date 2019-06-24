@@ -1,0 +1,301 @@
+<!-- Modal used by the admin to add comics -->
+
+<!-- Modal -->
+<div class="modal fade" id="create_modal" tabindex="-1" role="dialog" aria-labelledby="create_modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title" id="CreateModalLongTitle">  <!-- Title -->
+                    {{ lang["add_comic"] }}
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <form method="post" action="/comics_add" enctype="multipart/form-data" id="add_form" role="form" onsubmit="return validate_fields(this)">
+                    <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Comics list -->
+                    <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Comics keys that are in the current page -->
+
+                    <!-- ISBN input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="isbn" class="col-form-label">
+                                <!-- ISBN label -->
+                                <strong> {{ lang["isbn"] }} </strong>
+                                <!-- ISBN tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["isbn_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- ISBN input field -->
+                        <input name="isbn" type="number" class="form-control" id="isbn" aria-describedby="isbnHelpBlock"  max="9999999999999" placeholder="{{ lang["enter_isbn"] }}">
+
+                        <!-- Error message -->
+                        <div class="invalid-feedback">
+                            &nbsp {{ lang["invalid_isbn"] }}
+                        </div>
+
+                        <!-- ISBN help text (below comic title field) -->
+                        <small id="isbnHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["isbn_help_text"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Comic title input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="title" class="col-form-label">
+                                <!-- Comic title label -->
+                                <strong> {{ lang["title"] }} </strong>
+                                <!-- Comic title tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["title_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Comic title input field -->
+                        <input name="title" type="text" class="form-control" id="title" aria-describedby="titleHelpBlock" maxlength="200" required placeholder="{{ lang["enter_title"] }}">
+
+                        <!-- Error message -->
+                        <div class="invalid-feedback">
+                            &nbsp {{ lang["invalid_title"] }}
+                        </div>
+
+                        <!-- Comic title help text (below comic title field) -->
+                        <small id="titleHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["mandatory_field"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Publisher input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="publisher" class="col-form-label">
+                                <!-- Publisher label -->
+                                <strong> {{ lang["publisher"] }} </strong>
+                                <!-- Publisher tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["publisher_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Publisher input field -->
+                        <input name="publisher" type="text" class="form-control" id="publisher" aria-describedby="publisherHelpBlock" maxlength="100" placeholder="{{ lang["enter_publisher"] }}">
+
+                        <!-- Publisher help text (below comic title field) -->
+                        <small id="publisherHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["optional_field"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Edition input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="edition" class="col-form-label">
+                                <!-- Edition label -->
+                                <strong> {{ lang["edition"] }} </strong>
+                                <!-- Edition tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["edition_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Edition input field -->
+                        <input type="number" name="edition" class="form-control" id="edition" aria-describedby="editionHelpBlock" min="1" max="9999" placeholder="{{ lang["enter_edition"] }}">
+
+                        <!-- Error message -->
+                        <div class="invalid-feedback">
+                            &nbsp {{ lang["invalid_edition"] }}
+                        </div>
+
+                        <!-- Edition help text (below comic title field) -->
+                        <small id="editionHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["edition_help_text"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Plot input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="plot" class="col-form-label">
+                                <!-- Plot label -->
+                                <strong> {{ lang["plot"] }} </strong>
+                                <!-- Plot tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["plot_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Plot input field -->
+                        <textarea name="plot" class="form-control" rows="5" id="plot" maxlength="2000" aria-describedby="plotHelpBlock" placeholder="{{ lang["enter_plot"] }}"></textarea>
+
+                        <!-- Plot help text (below comic title field) -->
+                        <small id="plotHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["optional_field"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Type input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="type" class="col-form-label">
+                                <!-- Type label -->
+                                <strong> {{ lang["type"] }} </strong>
+                                <!-- Type tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg ml-1 text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["type_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Type select -->
+                        <select name="type" class="custom-select" id="type" required aria-describedby="typeHelpBlock">
+                            <option disabled selected> {{ lang["enter_type"] }} </option>
+                            <option value="comic"> {{ lang["comic"] }} </option>
+                            <option value="manga"> {{ lang["manga"] }} </option>
+                            <option value="anthology"> {{ lang["anthology"] }} </option>
+                        </select>
+
+                        <!-- Error message -->
+                        <div class="invalid-feedback">
+                            &nbsp &nbsp {{ lang["invalid_type"] }}
+                        </div>
+
+                        <!-- Type help text (below radio buttons) -->
+                        <div class="col-sm-12">
+                            <small id="typeHelpBlock" class="form-text text-muted">
+                                <em> {{ lang["mandatory_field"] }} </em>
+                            </small>
+                        </div>
+                    </div><hr>
+
+                    <!-- Origin input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="origin" class="col-form-label">
+                                <!-- Origin label -->
+                                <strong> {{ lang["origin"] }} </strong>
+                                <!-- Origin tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg ml-1 text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["origin_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Origin select -->
+                        <select name="origin" class="custom-select" id="origin" aria-describedby="originHelpBlock">
+                            <option disabled selected> {{ lang["enter_origin"] }} </option>
+                            <option value="american"> {{ lang["american"] }} </option>
+                            <option value="european"> {{ lang["european"] }} </option>
+                            <option value="other"> {{ lang["other"] }} </option>
+                        </select>
+
+                        <!-- Origin help text (below radio buttons) -->
+                        <div class="col-sm-12">
+                            <small id="originHelpBlock" class="form-text text-muted">
+                                <em> &nbsp {{ lang["optional_field"] }} </em>
+                            </small>
+                        </div>
+                    </div><hr>
+
+                    <!-- Value input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="value" class="col-form-label">
+                                <!-- Value label -->
+                                <strong> {{ lang["value"] }} </strong>
+                                <!-- Value tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["value_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Value input field -->
+                        <input name="value" type="number" step="0.01" class="form-control" id="value" min="0.00" aria-describedby="valueHelpBlock" placeholder="{{ lang["enter_value"] }}">
+
+                        <!-- Error message -->
+                        <div class="invalid-feedback">
+                            &nbsp {{ lang["invalid_value"] }}
+                        </div>
+
+                        <!-- Value help text (below comic title field) -->
+                        <small id="valueHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["value_help_text"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Date input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="save_date" class="col-form-label">
+                                <!-- Date label -->
+                                <strong> {{ lang["save_date"] }} </strong>
+                                <!-- Date tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["save_date_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Date input field -->
+                        <input name="save_date" type="date" class="form-control" id="save_date" aria-describedby="save_dateHelpBlock" placeholder="{{ lang["enter_save_date"] }}">
+
+                        <!-- Date help text (below comic date field) -->
+                        <small id="save_dateHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["save_date_help_text"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Cover input -->
+                    <div class="form-group">
+                        <div>
+                            <!-- Cover label -->
+                            <strong> {{ lang["cover"] }} </strong>
+                            <!-- Cover tooltip (question icon) -->
+                            <label for="cover" class="col-form-label">
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["cover_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Cover input field -->
+                        <div class="custom-file">
+                            <input type="file" accept="image/*" class="custom-file-input" id="cover" name="cover" aria-describedby="coverHelpBlock">
+                            <label class="custom-file-label" for="cover" data-browse="{{ lang["browse"] }}"> {{ lang["choose_file"] }} </label>
+                        </div>
+
+                        <!-- Cover help text (below user name field) -->
+                        <small id="coverHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["optional_field"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Form buttons -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success">                          <!-- Submit button -->
+                            {{ lang["accept"] }}
+                            <i class="fas fa-check fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-danger" data-dismiss="modal">       <!-- Cancel button -->
+                            {{ lang["cancel"] }}
+                            <i class="fas fa-times fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-secondary">                         <!-- Reset button -->
+                            {{ lang["restore"] }}
+                            <i class="fas fa-redo-alt fa-sm"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+<!-- Modal used by the client to quit comics -->
+
+
+<!-- Quit modal -->
+<div class="modal fade" id="quitModal{{ comic.key.urlsafe() }}" tabindex="-1" role="dialog" aria-labelledby="Quit modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+                <!-- Quit modal header -->
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title">  {{ lang["confirmation"] }} </h4>
+                </div>
+
+                <!-- Quit modal body -->
+                <div class="modal-body my-3">
+                    <h6 class="text-center">
+                        {% if session_genre == "male" %}
+                            {{ lang["are_you_sure_collection_male"] }}
+                        {% elif session_genre == "female" %}
+                            {{ lang["are_you_sure_collection_female"] }}
+                        {% else %}
+                            {{ lang["are_you_sure_collection_not_defined"] }}
+                        {% endif %}
+                    </h6>
+
+                    <!-- Quit form -->
+                    <form class="form" action="/collection_quit" method="post" role="form">
+                        <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Comics list -->
+                        <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Comics keys that are in the current page -->
+
+                        <div class="mt-5 text-center">		<!-- Quit form buttons -->
+                            <button type="submit" class="btn btn-info" name="key" value="{{ comic.key.urlsafe() }}">
+                                {{ lang["accept"] }}
+                                <i class="fas fa-check fa-sm"></i>
+                            </button>
+                            <button type="reset" class="btn btn-outline-info" data-dismiss="modal">
+                                {{ lang["cancel"] }}
+                                <i class="fas fa-times fa-sm"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <!-- End of quit form -->
+
+                </div>
+                <!-- End of quit modal body -->
+        </div>
+    </div>
+</div>
+<!-- End of quit modal -->

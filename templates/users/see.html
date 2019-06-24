@@ -1,0 +1,47 @@
+<!-- See modal -->
+<div class="modal fade bd-example-modal-lg" id="seeModal{{ user.key.urlsafe() }}" tabindex="-1" role="dialog" aria-labelledby="See modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+                <!-- See modal header -->
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title"> {{ user.name }} </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"> &times; </span>
+                        </button>
+                </div>
+
+                <!-- See modal body -->
+                <div class="modal-body mb-3">
+                    <div class="media">
+                        {% if user.picture and user.picture != None %}                                                    <!-- User picture -->
+                            <img src="data:image/png;base64,{{ user.picture.encode('base64') }}" class="align-self-center rounded border border-light ml-2" alt="Image" height="150" width="120">
+                        {% else %}                                                                                        <!-- Default picture -->
+                            <i class="fas fa-user fa-10x ml-2"></i>
+                        {% endif %}
+
+                        <div class="media-body ml-4">
+                            <p> <strong> {{ lang["email"] }}: </strong> {{ user.email }} </p>
+                            <p> <strong> {{ lang["role"] }}: </strong> {{ lang[user.role] }} </p>
+                            <p> <strong> {{ lang["genre"] }}: </strong> {{ lang[user.genre] }} </p>
+                            <p>
+                                {% if user.blocked == True %}
+                                    <strong class="text-danger">
+                                        {% if user_genre == "male" %}
+                                            {{ lang["blocked_male"] }}
+                                         {% elif user_genre == "female" %}
+                                            {{ lang["blocked_female"] }}
+                                        {% else %}
+                                            {{ lang["blocked_not_defined"] }}
+                                        {% endif %}
+                                    </strong>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of see modal body -->
+        </div>
+    </div>
+</div>
+<!-- End of see modal -->

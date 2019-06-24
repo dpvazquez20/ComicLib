@@ -1,0 +1,82 @@
+<!-- Modify picture modal -->
+<div class="modal fade" id="modifyPictureModal" tabindex="-1" role="dialog" aria-labelledby="Modify modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+                <!-- Modify picture modal header -->
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title"> {{ lang["modify_picture"] }} </h4>
+                </div>
+
+                <!-- Modify picture body -->
+                <div class="modal-body my-3">
+
+                    <!-- Modify picture form -->
+                    <form role="form" id="picture_form" action="/profile_modify_picture" method="post" enctype="multipart/form-data">
+                        <!-- Picture input -->
+                        <div class="form-group">
+                            <div>
+                                <!-- Picture label -->
+                                <strong> {{ lang["picture"] }} </strong>
+                                <!-- Picture tooltip (question icon) -->
+                                <label for="picture" class="col-form-label">
+                                    <span id="help">
+                                        {% if session_role == "admin" %}
+                                            <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["picture_tooltip"] }}"></i>
+                                        {% else %}
+                                            <i class="fas fa-question-circle fa-lg text-info" data-toggle="tooltip" data-placement="top" title="{{ lang["picture_tooltip"] }}"></i>
+                                        {% endif %}
+                                    </span>
+                                </label>
+                            </div>
+
+                            <!-- Picture input field -->
+                            <div class="custom-file">
+                                <input type="file" accept="image/*" class="custom-file-input" id="picture" name="picture" aria-describedby="pictureHelpBlock">
+                                <label class="custom-file-label" for="picture" data-browse="{{ lang["browse"] }}"> {{ lang["choose_file"] }} </label>
+                            </div>
+
+                            <!-- Picture help text (below user name field) -->
+                            <small id="pictureHelpBlock" class="form-text text-muted">
+                                <em> &nbsp {{ lang["optional_field"] }} </em>
+                            </small>
+                        </div>
+
+                        <div class="mt-4 text-center">		<!-- Modify picture form buttons -->
+                            {% if session_role == "admin" %}
+                                <button type="submit" class="btn btn-success" name="key" value="{{ user_key }}">
+                                    {{ lang ["accept"] }}
+                                    <i class="fas fa-check fa-sm"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                    {{ lang["cancel"] }}
+                                    <i class="fas fa-times fa-sm"></i>
+                                </button>
+                                <button type="reset" class="btn btn-secondary">
+                                    {{ lang["restore"] }}
+                                    <i class="fas fa-redo-alt fa-sm"></i>
+                                </button>
+                            {% else %}
+                                <button type="submit" class="btn btn-info" name="key" value="{{ user_key }}">
+                                    {{ lang ["accept"] }}
+                                    <i class="fas fa-check fa-sm"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-info" data-dismiss="modal">
+                                    {{ lang["cancel"] }}
+                                    <i class="fas fa-times fa-sm"></i>
+                                </button>
+                                <button type="reset" class="btn btn-outline-info">
+                                    {{ lang["restore"] }}
+                                    <i class="fas fa-redo-alt fa-sm"></i>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </form>
+                    <!-- End of modify picture form -->
+
+                </div>
+                <!-- End of modify picture modal body -->
+        </div>
+    </div>
+</div>
+<!-- End of modify picture modal -->

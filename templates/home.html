@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["home"] }} </title>
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/home.js"></script>
+
+    <!-- Additional CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/home.css"/>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% if session_role == 'admin' %}
+        {% include "elements/admin_navbar.html" %}      <!-- Admin navbar -->
+    {% else %}
+        {% include "elements/client_navbar.html" %}     <!-- Client navbar -->
+    {% endif %}
+	<!-- End of navbar -->
+
+	<!-- Main body -->
+	<div class="container mb-5">
+
+        <!-- User search modal -->
+        {% include "elements/user_search.html" %}
+
+		<div class="row justify-content-center mt-4">
+            <!-- Reset button -->
+            {% if session_role == "admin" %}
+                <form role="form" action="/reset" method="get">
+                    <button type="submit" class="btn btn-lg btn-outline-secondary">
+                        {{ lang["reset_db"] }}
+                    </button>
+                </form>
+            {% endif %}
+
+            <!-- Welcome message -->
+			<div class="col-md-6">
+                {% if session_role == "admin" %}
+				<div id="welcomeAlert" class="alert alert-secondary alert-dismissible fade show" role="alert">	<!-- Admin welcome message -->
+                {% else %}
+                <div id="welcomeAlert" class="alert alert-primary alert-dismissible fade show" role="alert"> <!-- Client welcome message -->
+                {% endif %}
+
+				  	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    	<span aria-hidden="true"> &times; </span>
+				  	</button>
+				  	<div class="media">
+                        <div class="media-body">                                                      <!-- Message -->
+						    <h3 class="text-center">
+                                {% if session_genre == "male" %}    <!-- Adapt the message to the user genre -->
+                                    {{ lang["welcome_male"] }} {{ session_name }}
+                                {% elif session_genre == "female" %}
+                                    {{ lang["welcome_female"] }} {{ session_name }}
+                                {% else %}
+                                    {{ lang["welcome_not_defined"] }} {{ session_name }}
+                                {% endif %}
+                            </h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        {% if session_role == 'client' and carousel and carousel|length > 0 %}
+            <!-- New comics title -->
+            <hr> <h2> {{ lang["new_comics"] }} </h2> <hr>
+
+            <!-- New comics carousel -->
+            <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% for comic_list in carousel %}
+                        {% if carousel|first == comic_list %}
+                            <div class="carousel-item active" data-interval="30000">
+                        {% else %}
+                            <div class="carousel-item" data-interval="30000">
+                        {% endif %}
+
+                            <div class="row justify-content-center">
+                                {% for comic in comic_list %}
+                                    <div class="col-md-2">
+                                    <!-- Comic -->
+                                        <div class="card mt-3">
+                                            {% if comic.cover and comic.cover != None %}                                                    <!-- Comic picture -->
+                                                <img src="data:image/png;base64,{{ comic.cover.encode('base64') }}" class="card-img-top" alt="Image">
+                                            {% else %}                                                                       <!-- Default picture -->
+                                                <img src="images/comic.jpg" class="card-img-top" alt="Image">
+                                            {% endif %}
+
+                                            <div class="card-body">
+                                                <h6 class="card-title"> <!-- Comic title -->
+                                                    {{ comic.title }}
+                                                </h6>
+                                                <p class="card-text">
+                                                    <small> {{ lang[comic.type] }} </small> <br>     <!-- Comic type -->
+                                                    <small> {{ lang[comic.origin] }} </small> <br>   <!-- Comic origin -->
+                                                </p>
+                                            </div>
+
+                                            <!-- Comic buttons -->
+                                            <div class="card-footer text-center">
+                                                <!-- If user already added the comic show the delete button, else show the add button -->
+                                                {% if comic.owned == True %}
+                                                    <form role="form" action="/home_quit" method="post">
+                                                        <button class="btn btn-outline-danger btn-sm btn-block" type="submit" name="comic_key" value="{{ comic.key.urlsafe() }}" data-placement="bottom" data-toggle="tooltip" title="{{ lang["quit_comic"] }}">   <!-- Quit comic -->
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </form>
+                                                {% else %}
+                                                    <form role="form" action="/home_add" method="post">
+                                                        <button class="btn btn-outline-info btn-sm btn-block" type="submit" name="comic_key" value="{{ comic.key.urlsafe() }}" data-placement="bottom" data-toggle="tooltip" title="{{ lang["add_comic"] }}">   <!-- Add comic -->
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    <!-- End of comic -->
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            </div>
+                    {% endfor %}
+                </div>
+
+                <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">      <!-- Previous carousel slide button -->
+                    <span class="fa fa-angle-left fa-3x" aria-hidden="true" style="color:#17a2b8"></span>
+                    <span class="sr-only"> {{ lang["previous"] }} </span>
+                </a>
+                <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">      <!-- Next carousel slide button -->
+                    <span class="fa fa-angle-right fa-3x" aria-hidden="true" style="color:#17a2b8"></span>
+                    <span class="sr-only"> {{ lang["next"] }} </span>
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+	<!-- End of main body -->
+
+</body>
+</html>

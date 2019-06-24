@@ -1,0 +1,74 @@
+<!-- Pagination (before list) -->
+
+
+<nav aria-label="Page navigation">
+    <ul class="pagination pagination-sm">
+
+        {% if current_number_page == 1 %}               <!-- First page (item disabled) -->
+            <li class="page-item disabled">
+        {% else %}
+            <li class="page-item">
+        {% endif %}
+                <form action="/collection" method="post" role="form">
+                    <input name="all_keys" value="{{ all_keys }}" style="display: none">
+                    <button class="page-link" type="submit" name="page" value="1" aria-label="First" data-toggle="tooltip" data-placement="top" title="{{ lang["first_page"] }}">
+                        <span aria-hidden="true"> &lt; </span>
+                    </button>
+                </form>
+            </li>
+
+        {% if current_number_page == 1 %}               <!-- Previous page (item disabled) -->
+            <li class="page-item disabled">
+        {% else %}
+            <li class="page-item">
+        {% endif %}
+                <form action="/collection" method="post" role="form">
+                    <input name="all_keys" value="{{ all_keys }}" style="display: none">
+                    <button class="page-link" type="submit" name="page" value="{{ current_number_page - 1 }}" aria-label="Previous" data-toggle="tooltip" data-placement="top" title="{{ lang["previous_page"] }}">
+                        <span aria-hidden="true"> &laquo; </span>
+                    </button>
+                </form>
+            </li>
+
+        {% for i in pages %}                            <!-- Page numbers -->
+            {% if i == current_number_page %}
+                <li class="page-item active">
+            {% else %}
+                <li class="page-item">
+            {% endif %}
+                    <form action="/collection" method="post" role="form">
+                        <input name="all_keys" value="{{ all_keys }}" style="display: none">
+                        <button class="page-link" name="page" value="{{ i }}" type="submit"> {{ i }} </button>
+                    </form>
+                </li>
+        {% endfor %}
+
+        {% if current_number_page == last_page %}       <!-- Next page (item disabled) -->
+            <li class="page-item disabled">
+        {% else %}
+            <li class="page-item">
+        {% endif %}
+                <form action="/collection" method="post" role="form">
+                    <input name="all_keys" value="{{ all_keys }}" style="display: none">
+                    <button class="page-link" value="{{ current_number_page + 1 }}" name="page" type="submit" aria-label="Next" data-toggle="tooltip" data-placement="top" title="{{ lang["next_page"] }}">
+                        <span aria-hidden="true"> &raquo; </span>
+                    </button>
+                </form>
+            </li>
+
+        {% if current_number_page == last_page %}       <!-- Last page (item disabled) -->
+            <li class="page-item disabled">
+        {% else %}
+            <li class="page-item">
+        {% endif %}
+                <form action="/collection" method="post" role="form">
+                    <input name="all_keys" value="{{ all_keys }}" style="display: none">
+                    <button class="page-link" value="{{ last_page }}" name="page" type="submit" aria-label="Last" data-toggle="tooltip" data-placement="top" title="{{ lang["last_page"] }}">
+                        <span aria-hidden="true"> &gt; </span>
+                    </button>
+                </form>
+            </li>
+
+    </ul>
+</nav>
+<!-- End of pagination -->

@@ -1,0 +1,69 @@
+<!-- LOGIN AND SIGN IN PAGE -->
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+    <title> {{ lang["login"] }} </title>
+
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/index.js"></script>
+
+    <!-- Additional CSS styles -->
+    <link rel="stylesheet" type="text/css" href="styles/index.css"/>
+</head>
+<body>
+	<div class="container">
+		<div class="row justify-content-center mt-5">
+			<div class="col-md-4 mt-3">
+
+				<!-- Log in box -->
+      			<div class="jumbotron py-5">
+
+      				<!-- Box header -->
+      				<h1 class="text-muted text-center mb-4">
+	      				<img src="images/loginIcon.png" class="rounded-circle" alt="Image" height="80" width="100">
+	      				ComicLib
+      				</h1>
+
+  					<!-- Log in form -->
+                    {% include "elements/login.html" %}
+
+					<!-- Error message -->
+					{% if error_message %}
+					    {% include "elements/error_message.html" %}
+					{% endif %}
+
+					<!-- Sign in -->
+                        <!-- Button to open the sign in modal -->
+                        <hr>
+                        <div class="col-md-12 text-center">
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#signIn" style="color:#17a2b8">
+                                {{ lang["sign_in"] }}
+                            </button>
+                        </div>
+
+                        <!-- Sign in modal -->
+                        {% include "elements/signin.html" %}
+
+                    <!-- Forget password -->
+                    <hr>
+                    <div class="col-md-12 text-center">
+                        <!-- Button to open the forget password modal -->
+                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#forget" style="color:#17a2b8">
+                            {{ lang["forget_password"] }}
+                        </button>
+                    </div>
+
+                    <!-- Forget password modal -->
+                    {% include "elements/forget.html" %}
+
+  				</div>
+  				<!-- End of log in box -->
+
+	    	</div>
+	    </div>
+    </div>
+</body>
+</html>

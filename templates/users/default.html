@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["users_title"] }} </title>
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/users.js"></script>
+
+    <!-- Additional CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/users.css"/>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% include "elements/admin_navbar.html" %}      <!-- Admin navbar -->
+
+	<!-- Main body -->
+	<div class="container">
+
+        <!-- Order and search fields -->
+        {% include "users/order_filter_search.html" %}
+
+        <hr>
+		<!-- Error message -->
+        {% if error_message %}
+            {% include "elements/error_message.html" %}
+        {% endif %}
+
+        <!-- Ok message -->
+        {% if ok_message %}
+            {% include "elements/ok_message.html" %}
+        {% endif %}
+
+        <!-- Main buttons -->
+        <div class="row justify-content-around">
+
+            <!-- Add button -->
+            <span data-toggle="tooltip" data-placement="left" title="{{ lang["add_user"] }}">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create_modal">
+                     {{ lang["add"] }} &nbsp
+                    <i class="fas fa-plus"></i>
+                </button>
+            </span>
+
+            {% if users and users|length > 0 %}
+            <!-- Delete page button -->
+                <span data-toggle="tooltip" data-placement="right" title="{{ lang["delete_page_tooltip"] }}">
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#delete_page_modal">
+                         {{ lang["delete_page"] }} &nbsp
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </span>
+
+                {% include "users/delete_all.html" %}
+            {% endif %}
+
+        </div>
+		<hr>
+
+        <!-- Add user modal (form) -->
+        {% include "users/add.html" %}
+
+        <!-- Elements per page and pagination -->
+        <div class="col-md-12">
+            <div class="row justify-content-between">
+
+                <!-- Pagination -->
+                {% if pages and pages|length > 1 %}
+                    {% include "users/pagination.html" %}
+                {% endif %}
+
+                <!-- Elements per page -->
+                {% include "users/elems_per_page.html" %}
+
+            </div>
+        </div>
+
+        <!-- Users list (Two columns per page) -->
+        {% if users and users|length > 0 %}
+            <ul class="list unstyled mb-3">
+                <div class="row">
+
+                    <!-- Users columns -->
+                    {% for user in users %}
+
+                        <!-- Delete user confirmation modal -->
+                        {% include "users/delete.html" %}
+
+                        <!-- Modify user modal (form) -->
+                        {% include "users/modify.html" %}
+
+                        <!-- See user modal (form) -->
+                        {% include "users/see.html" %}
+
+                        <!-- Show the block or unblock user modal in function of the variable value -->
+                        {% if user.blocked == False %}
+                            <!-- Block user modal (form) -->
+                            {% include "users/block.html" %}
+                        {% else %}
+                            <!-- Unblock user modal -->
+                            {% include "users/unblock.html" %}
+                        {% endif %}
+
+                        <div class="col-md-6">
+                            <hr>
+                            <li class="media">
+                                <!-- User picture -->
+                                {% if user.picture and user.picture != None %}                                                    <!-- User picture -->
+                                    <img src="data:image/png;base64,{{ user.picture.encode('base64') }}" class="rounded border border-light mt-1" alt="{{ user.name }}" height="75" width="60">
+                                {% else %}                                                                       <!-- Default picture -->
+                                    <i class="fas fa-user fa-3x mt-3"></i>
+                                {% endif %}
+
+                                <!-- User attributes -->
+                                <div class="media-body ml-4">
+                                    <h5> {{ user.name }} </h5>
+                                    {{ user.email }}
+                                    <br>
+                                    {% if user.role == "admin" or user.role == "client" %}
+                                        {{ lang[user.role] }}
+                                    {% endif %}
+                                    {% if user.blocked == True %}
+                                        <strong class="text-danger text-lowercase">
+                                            {% if user.genre == "male" %}
+                                                {{ lang["blocked_male"] }}
+                                             {% elif user.genre == "female" %}
+                                                {{ lang["blocked_female"] }}
+                                            {% else %}
+                                                {{ lang["blocked_not_defined"] }}
+                                            {% endif %}
+                                        </strong>
+                                    {% endif %}
+                                </div>
+
+                                <!-- User buttons -->
+                                <div class="mt-4 mr-4">
+                                    <span data-toggle="tooltip" data-placement="top" title="{{ lang["delete_user"] }}">                 <!-- Delete button -->
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ user.key.urlsafe() }}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </span>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["modify_user"] }}">              <!-- Modify button -->
+                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modifyModal{{ user.key.urlsafe() }}">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                    </span>
+                                    <span data-toggle="tooltip" data-placement="top" title="{{ lang["see_user"] }}">                     <!-- See button -->
+                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#seeModal{{ user.key.urlsafe() }}">
+                                            <i class="fas fa-info"></i>
+                                        </button>
+                                    </span>
+                                    <!-- Show the block or unblock user button in function of the variable value -->
+                                    {% if user.blocked == False %}
+                                        <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["block_user"] }}">             <!-- Block button -->
+                                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#blockModal{{ user.key.urlsafe() }}">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                        </span>
+                                    {% else %}
+                                        <span data-toggle="tooltip" data-placement="top" title="{{ lang["unblock_user"] }}" >             <!-- Unblock button -->
+                                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#unblockModal{{ user.key.urlsafe() }}">
+                                                <i class="fas fa-check-circle"></i>
+                                            </button>
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </ul>
+        {% endif %}
+        <!-- Element column -->
+
+        <!-- Bottom pagination -->
+        {% if pages and pages|length > 1 %}
+        <div class="col-md-12 mb-4">
+            <div class="row justify-content-end">
+
+                <!-- Pagination -->
+                {% include "users/pagination.html" %}
+
+            </div>
+        </div>
+        {% endif %}
+
+	</div>
+	<!-- End of main body -->
+
+</body>
+</html>

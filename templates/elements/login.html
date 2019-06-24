@@ -1,0 +1,20 @@
+<!-- Log in form -->
+
+<form action="/login" method="post" role="form" id="login_form">
+    <div class="form-group">									<!-- Log in email -->
+        <input name="email" type="email" class="form-control" placeholder="{{ lang['your_email'] }}" id="email" autofocus required>
+    </div>
+    <div class="form-group">									<!-- Log in password -->
+        <input name="password" type="password" class="form-control" id="pwd" pattern=".{8,20}" required maxlength="20" placeholder="{{ lang["enter_your_password"] }}"  title="{{ lang["between8-20"] }}">
+    </div>
+    <div class="custom-control custom-checkbox mb-3">           <!-- Show password button -->
+        <input type="checkbox" class="custom-control-input" id="show_pass" onclick="show_password()">
+        <label class="custom-control-label text-info" for="show_pass">
+            {{ lang["show_pass"] }}
+        </label>
+    </div>
+    <button type="submit" class="btn btn-info btn-block"> 	<!-- Log in button -->
+        {{ lang["enter"] }}
+        <i class="fas fa-sign-in-alt"></i>
+    </button>
+</form>

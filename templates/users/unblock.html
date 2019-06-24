@@ -1,0 +1,49 @@
+<!-- Modal used by the admin to unblock users -->
+
+
+<!-- unblock modal -->
+<div class="modal fade" id="unblockModal{{ user.key.urlsafe() }}" tabindex="-1" role="dialog" aria-labelledby="Unblock modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+                <!-- Unblock modal header -->
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title">  {{ lang["confirmation"] }} </h4>
+                </div>
+
+                <!-- Unblock modal body -->
+                <div class="modal-body my-3">
+                    <h6 class="text-center">
+                        {% if session_genre == "male" %}
+                            {{ lang["are_you_sure_unblock_user_male"] }}
+                        {% elif session_genre == "female" %}
+                            {{ lang["are_you_sure_unblock_user_female"] }}
+                        {% else %}
+                            {{ lang["are_you_sure_unblock_user_not_defined"] }}
+                        {% endif %}
+                    </h6>
+
+                    <!-- Unblock form -->
+                    <form class="form" action="/users_unblock" method="post" role="form">
+                        <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Users list -->
+                        <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Users keys that are in the current page -->
+
+                        <div class="mt-5 text-center">		<!-- Unblock form buttons -->
+                            <button type="submit" class="btn btn-success" name="key" value="{{ user.key.urlsafe() }}">
+                                {{ lang["accept"] }}
+                                <i class="fas fa-check fa-sm"></i>
+                            </button>
+                            <button type="reset" class="btn btn-danger" data-dismiss="modal">
+                                {{ lang["cancel"] }}
+                                <i class="fas fa-times fa-sm"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <!-- End of unblock form -->
+
+                </div>
+                <!-- End of unblock modal body -->
+        </div>
+    </div>
+</div>
+<!-- End of unblock modal -->

@@ -1,0 +1,122 @@
+<!-- User data content -->
+
+<div class="tab-pane fade show active" id="nav-user-data" role="tabpanel" aria-labelledby="nav-user-data-tab">
+    <div class="media justify-content-center">
+
+        <!-- Profile picture -->
+        {% if session_picture != None %}                                          <!-- User picture -->
+            {% if session_role == "admin" %}
+                <img src="data:image/png;base64,{{ session_picture.encode('base64') }}" class="rounded-circle border border-secondary bg-secondary mt-5 mr-5" alt="Image" height="190" width="190">
+            {% else %}
+                <img src="data:image/png;base64,{{ session_picture.encode('base64') }}" class="rounded-circle border border-info bg-info mt-5 mr-5" alt="Image" height="190" width="190">
+            {% endif %}
+        {% else %}                                                                <!-- Default picture -->
+            <i class="fas fa-user fa-9x mt-5 mr-5"></i>
+        {% endif %}
+
+        <!-- Media body -->
+        <div class="media-body mt-4">
+
+            <!-- User name -->
+            <h5 class="mt-3">
+                {{ session_name }}
+
+                {% if user_genre == "male" %}
+                    <span data-toggle="tooltip" data-placement="right" title="{{ lang["modify_username_tooltip_male"] }}">
+                {% elif user_genre == "female" %}
+                    <span data-toggle="tooltip" data-placement="right" title="{{ lang["modify_username_tooltip_female"] }}">
+                {% else %}
+                    <span data-toggle="tooltip" data-placement="right" title="{{ lang["modify_username_tooltip_not_defined"] }}">
+                {% endif %}
+
+                        {% if session_role == "client" %}
+                        <button type="button" class="btn btn-outline-info btn-sm ml-2" data-toggle="modal" data-target="#modifyUserNameModal">
+                        {% else %}
+                        <button type="button" class="btn btn-light btn-sm ml-2" data-toggle="modal" data-target="#modifyUserNameModal">
+                        {% endif %}
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </span>
+            </h5>
+
+            <!-- Password -->
+            <p>
+                {{ lang["change_password"] }}
+                <span data-toggle="tooltip" data-placement="right" title="{{ lang["change_password_tooltip"] }}">
+                    {% if session_role == "client" %}
+                    <button type="button" class="btn btn-outline-info btn-sm ml-2" data-toggle="modal" data-target="#modifyPasswordModal">
+                    {% else %}
+                    <button type="button" class="btn btn-light btn-sm ml-2" data-toggle="modal" data-target="#modifyPasswordModal">
+                    {% endif %}
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </span>
+            </p>
+
+            <!-- Email -->
+            <p>
+                <strong> {{ lang["email"] }}: </strong> &nbsp{{ user_email }}
+                <span data-toggle="tooltip" data-placement="right" title="{{ lang["modify_email_tooltip"] }}">
+                    {% if session_role == "client" %}
+                    <button type="button" class="btn btn-outline-info btn-sm ml-2" data-toggle="modal" data-target="#modifyEmailModal">
+                    {% else %}
+                    <button type="button" class="btn btn-light btn-sm ml-2" data-toggle="modal" data-target="#modifyEmailModal">
+                    {% endif %}
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </span>
+            </p>
+
+            <!-- Genre -->
+            <p>
+                {% if user_genre == "male" or user_genre == "female" %}
+                    <strong> {{ lang["genre"] }}: </strong> &nbsp{{ lang[user_genre] }}
+                {% else %}
+                    <strong> {{ lang["genre"] }}: </strong> &nbsp{{ lang["not_defined"] }}
+                {% endif %}
+
+                <span data-toggle="tooltip" data-placement="right" title="{{ lang["modify_genre_tooltip"] }}">
+                    {% if session_role == "client" %}
+                    <button type="button" class="btn btn-outline-info btn-sm ml-2" data-toggle="modal" data-target="#modifyGenreModal">
+                    {% else %}
+                    <button type="button" class="btn btn-light btn-sm ml-2" data-toggle="modal" data-target="#modifyGenreModal">
+                    {% endif %}
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </span>
+            </p>
+
+            <p>
+                {{ lang["modify_picture"] }}
+                <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["modify_picture"] }}">
+                    {% if session_role == "client" %}
+                    <button type="button" class="btn btn-outline-info btn-md" data-toggle="modal" data-target="#modifyPictureModal">
+                    {% else %}
+                    <button type="button" class="btn btn-light btn-md" data-toggle="modal" data-target="#modifyPictureModal">
+                    {% endif %}
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </span>
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Modify username modal -->
+    {% include "profile/username_modal.html" %}
+
+    <!-- Modify password modal -->
+    {% include "profile/password_modal.html" %}
+
+    <!-- Modify email modal -->
+    {% include "profile/email_modal.html" %}
+
+    <!-- Modify genre modal -->
+    {% include "profile/genre_modal.html" %}
+
+    <!-- Modify picture modal -->
+    {% include "profile/picture_modal.html" %}
+
+</div>
+<!-- End of user data content -->

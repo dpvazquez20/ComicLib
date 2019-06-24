@@ -1,0 +1,35 @@
+<!-- Modal used by the user to search comics -->
+
+<!-- Modal -->
+<div class="modal fade" id="user_search" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title" id="SearchModalLongTitle">  <!-- Title -->
+                    {{ lang["search_something"] }}
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <form action="/home_search" method="post" role="form">
+                    <div class="form-group row"></div>
+
+                        <select name="search" class="selectpicker mb-4 border rounded border-info" data-width="90%"  id="{{ lang["search_not_results"] }}" data-live-search="true" title="{{ lang["search_something_user"] }}" data-size="12" onchange="this.form.submit()">
+                        {% if all_comics and all_comics|length > 0 %}
+                            {% for comic in all_comics %}
+                                <option value="{{ comic.key.urlsafe() }}" data-tokens="{{ comic.title or comic.title|lower or comic.title|upper or comic.title|title }}" data-content="{% if comic.cover and comic.cover != None %}<img src='data:image/png;base64,{{ comic.cover.encode('base64') }}' alt='Img' height='26' width='21' class='rounded'>&nbsp&nbsp&nbsp{{ comic.title }}{% else %}<img src='images/comic.jpg' alt='Img' height='26' width='21' class='rounded'>&nbsp&nbsp&nbsp{{ comic.title }}{% endif %}">
+                                </option>
+                            {% endfor %}
+                        {% endif %}
+                        </select>
+
+                        <button type="submit" class="btn btn-outline-info mb-4" data-toggle="tooltip" data-placement="top" title="{{ lang["search"] }}">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

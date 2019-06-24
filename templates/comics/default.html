@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["comics_title"] }} </title>
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/comics.js"></script>
+
+    <!-- Additional CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/comics.css"/>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% include "elements/admin_navbar.html" %}      <!-- Admin navbar -->
+
+	<!-- Main body -->
+	<div class="container">
+
+        <!-- Order and search fields -->
+        {% include "comics/order_filter_search.html" %}
+
+        <hr>
+		<!-- Error message -->
+        {% if error_message %}
+            {% include "elements/error_message.html" %}
+        {% endif %}
+
+        <!-- Ok message -->
+        {% if ok_message %}
+            {% include "elements/ok_message.html" %}
+        {% endif %}
+
+        <!-- Main buttons -->
+        <div class="row justify-content-around">
+
+            <!-- Add button -->
+            <span data-toggle="tooltip" data-placement="left" title="{{ lang["add_comic"] }}">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create_modal">
+                     {{ lang["add"] }} &nbsp
+                    <i class="fas fa-plus"></i>
+                </button>
+            </span>
+
+            {% if comics and comics|length > 0 %}
+            <!-- Delete page button -->
+                <span data-toggle="tooltip" data-placement="right" title="{{ lang["delete_page_tooltip"] }}">
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#delete_page_modal">
+                         {{ lang["delete_page"] }} &nbsp
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </span>
+
+                {% include "comics/delete_all.html" %}
+            {% endif %}
+
+        </div>
+		<hr>
+
+        <!-- Add comic modal (form) -->
+        {% include "comics/add.html" %}
+
+        <!-- Elements per page and pagination -->
+        <div class="col-md-12">
+            <div class="row justify-content-between">
+
+                <!-- Pagination -->
+                {% if pages and pages|length > 1 %}
+                    {% include "comics/pagination.html" %}
+                {% endif %}
+
+                <!-- Elements per page -->
+                {% include "comics/elems_per_page.html" %}
+
+            </div>
+        </div>
+
+        <!-- Comics list (Two columns per page) -->
+        {% if comics and comics|length > 0 %}
+            <ul class="list unstyled mb-3">
+                <div class="row">
+
+                    <!-- Comics columns -->
+                    {% for comic in comics %}
+
+                        <!-- Delete comic confirmation modal -->
+                        {% include "comics/delete.html" %}
+
+                        <!-- Modify comic modal (form) -->
+                        {% include "comics/modify.html" %}
+
+                        <!-- See comic modal (form) -->
+                        {% include "comics/see.html" %}
+
+                        <!-- Add authors comic modal (form) -->
+                        {% include "comics/add_authors.html" %}
+
+                        <div class="col-md-6">
+                            <hr>
+                            <li class="media">
+                                <!-- Comic picture -->
+                                {% if comic.cover and comic.cover != None %}                                                    <!-- comic picture -->
+                                    <img src="data:image/png;base64,{{ comic.cover.encode('base64') }}" class="align-self-center rounded border border-light" alt="{{ comic.title }}" height="110" width="85">
+                                {% else %}                                                                       <!-- Default picture -->
+                                    <img src="images/comic.jpg" class="align-self-center rounded border border-light" alt="Image" height="110" width="85">
+                                {% endif %}
+
+                                <!-- Comic attributes -->
+                                <div class="media-body ml-3">
+                                    <h5> {{ comic.title }} </h5>
+                                    {{ lang[comic.type] }} <br>
+                                    {{ lang["save_date"] }}: {{ comic.save_date }}
+                                </div>
+
+                                <!-- Comic buttons -->
+                                <div class="mt-4 ml-1">
+                                    <span data-toggle="tooltip" data-placement="top" title="{{ lang["delete_comic"] }}">                 <!-- Delete button -->
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ comic.key.urlsafe() }}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </span>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["modify_comic"] }}">              <!-- Modify button -->
+                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modifyModal{{ comic.key.urlsafe() }}">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                    </span>
+                                    <span data-toggle="tooltip" data-placement="top" title="{{ lang["see_comic"] }}">                     <!-- See button -->
+                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#seeModal{{ comic.key.urlsafe() }}">
+                                            <i class="fas fa-info"></i>
+                                        </button>
+                                    </span>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["add_author_comic"] }}">           <!-- Add author button -->
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addAuthorModal{{ comic.key.urlsafe() }}">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </li>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </ul>
+        {% endif %}
+        <!-- Element column -->
+
+        <!-- Bottom pagination -->
+        {% if pages and pages|length > 1 %}
+        <div class="col-md-12 mb-4">
+            <div class="row justify-content-end">
+
+                <!-- Pagination -->
+                {% include "comics/pagination.html" %}
+
+            </div>
+        </div>
+        {% endif %}
+
+	</div>
+	<!-- End of main body -->
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!-- Sign in box -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="signIn">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal header -->
+            <div class="modal-header justify-content-center">
+                <h4 class="modal-title"> {{ lang["create_account"] }} </h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body my-3">
+
+                <!-- Sign in form -->
+                <form action="/signin" method="post" role="form" id="signin_form" onsubmit="return validate_fields(this)">
+
+                    <!-- Sign in email -->
+                    <div class="form-group row">
+                        <label for="s_email" class="col-sm-1 col-form-label">
+                            <span id="help">                            <!-- Email tooltip (question icon) -->
+                                <i class="fas fa-question-circle fa-lg ml-1 text-info" data-toggle="tooltip" data-placement="top" title="{{ lang["email_tooltip"] }}"></i>
+                            </span>
+                        </label>
+                        <div class="col-sm-11">                         <!-- Email input field -->
+                            <input name="s_email" type="email" class="form-control" id="s_email" aria-describedby="emailHelpBlock" required placeholder="{{ lang["enter_email"] }}" onblur="validate_email2(this)">
+                            <div class="invalid-feedback">              <!-- Error message if the email validation is wrong -->
+                                &nbsp {{ lang["invalid_email"] }}
+                            </div>
+                            <div>                                       <!-- Email help text(below form field) -->
+                                <small id="emailHelpBlock" class="form-text text-muted">
+                                    <em> &nbsp {{ lang["needs_email"] }} </em>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sign in password -->
+                    <div class="form-group row mt-2">
+                        <label for="s_password" class="col-sm-1 col-form-label">
+                            <span id="help">                            <!-- Password tooltip (question icon) -->
+                                <i class="fas fa-question-circle fa-lg ml-1 text-info" data-toggle="tooltip" data-placement="top" title="{{ lang["password_tooltip"] }}"></i>
+                            </span>
+                        </label>
+                        <div class="col-sm-5">                          <!-- Password input field -->
+                            <input name="s_password" type="password" class="form-control" id="s_password" pattern=".{8,20}" maxlength="20" aria-describedby="passwordHelpBlock" required placeholder="{{ lang["enter_password"] }}" title="{{ lang["between8-20"] }}">
+                            <!-- Error message if the password and repeat password aren't equals -->
+                            <div class="invalid-feedback">
+                                &nbsp {{ lang["invalid_password"] }}
+                            </div>
+                        </div>
+                        <label for="rs_password" class="col-sm-1 col-form-label text-info">
+                            <span id="help">                            <!-- Repeat password tooltip (question icon) -->
+                                <i class="fas fa-question-circle fa-lg ml-1" data-toggle="tooltip" data-placement="top" title="{{ lang["repeat_password_tooltip"] }}"></i>
+                            </span>
+                        </label>
+                        <div class="col-sm-5">                          <!-- Repeat password input field -->
+                            <input name="rs_password" type="password" class="form-control" id="rs_password" pattern=".{8,20}" maxlength="20" aria-describedby="passwordHelpBlock" required placeholder="{{ lang["enter_repeat_password"] }}" title="{{ lang["between8-20"] }}" onblur="validate_pass(this)">
+                        </div>
+
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-11">                         <!-- Help text (below password field) -->
+                            <small id="passwordHelpBlock" class="form-text text-muted">
+                                <em> &nbsp {{ lang["password_help_text"] }} </em>
+                            </small>
+
+                            <div class="custom-control custom-checkbox mt-1">           <!-- Show password button -->
+                                <input type="checkbox" class="custom-control-input" id="show_pass2" onclick="show_passwords()">
+                                <label class="custom-control-label" for="show_pass2">
+                                    {{ lang["show_pass2"] }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sign in username -->
+                    <div class="form-group row mt-2">
+                        <label for="s_username" class="col-sm-1 col-form-label">
+                            <span id="help">                                                <!-- User name tooltip (question icon) -->
+                                <i class="fas fa-question-circle fa-lg ml-1 text-info" data-toggle="tooltip" data-placement="top" title="{{ lang["user_name_tooltip"] }}"></i>
+                            </span>
+                        </label>
+                        <div class="col-sm-11">                                             <!-- User name input field -->
+                            <input name="s_name" type="text" class="form-control" id="s_username" maxlength="20" aria-describedby="usernameHelpBlock" placeholder="{{ lang["enter_user_name"] }}" onblur="validate_username(this)">
+                            <div class="invalid-feedback">                                  <!-- Error message if the username has more than 20 characters -->
+                                &nbsp {{ lang["invalid_user_name"] }}
+                            </div>
+                            <small id="usernameHelpBlock" class="form-text text-muted">     <!-- User name help text (below user name field) -->
+                                <em> &nbsp {{ lang["user_name_help_text"] }} </em>
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Sign in genre radio buttons -->
+                    <div class="form-group row mt-2">
+                        <div class="col-sm-1">
+                            <span id="help">                                                            <!-- Genre tooltip (question icon) -->
+                                <i class="fas fa-question-circle fa-lg ml-1 text-info" data-toggle="tooltip" data-placement="top" title="{{ lang["genre_tooltip"] }}"></i>
+                            </span>
+                        </div>
+                        <div class="col-sm-11">
+                            <div class="row justify-content-around">
+                                <div class="custom-control custom-radio custom-control-inline">         <!-- Man radio button -->
+                                    <input type="radio" id="man_radio" name="s_genre" class="custom-control-input" value="male" aria-describedby="genreHelpBlock" onblur="validate_genre(this)">
+                                    <label class="custom-control-label" for="man_radio"> {{ lang["male"] }} </label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">         <!-- Woman radio button -->
+                                    <input type="radio" id="woman_radio" name="s_genre" class="custom-control-input" value="female" aria-describedby="genreHelpBlock" onblur="validate_genre(this)">
+                                    <label class="custom-control-label" for="woman_radio"> {{ lang["female"] }} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <small id="genreHelpBlock" class="form-text text-muted text-center">        <!-- Genre help text (below radio buttons) -->
+                                <em> {{ lang["optional_field"] }} </em>
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Sign in form buttons -->
+                    <hr class="mt-4">
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-info">                          <!-- Submit button -->
+                            {{ lang["accept"] }}
+                            <i class="fas fa-check fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-outline-info" data-dismiss="modal">       <!-- Cancel button -->
+                            {{ lang["cancel"] }}
+                            <i class="fas fa-times fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-outline-info">                         <!-- Reset button -->
+                            {{ lang["restore"] }}
+                            <i class="fas fa-redo-alt fa-sm"></i>
+                        </button>
+                    </div>
+
+                </form>
+                <!-- End of sign in form -->
+
+            </div>
+            <!-- End of sign in modal body -->
+
+        </div>
+    </div>
+</div>
+<!-- End of modal -->

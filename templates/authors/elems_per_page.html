@@ -1,0 +1,15 @@
+<!-- Elements per page -->
+
+
+<span data-toggle="tooltip" data-placement="right" title="{{ lang["elems_per_page"] }}">
+    <form class="form-inline" action="/authors_change_num_elems" method="post" role="form">
+        <select class="selectpicker" name="num_elems" data-width="fit" onchange="this.form.submit()" title="{{ authors|length }}">
+            <option value="10"> 10 </option>
+            <option value="20"> 20 </option>
+            <option value="30"> 30 </option>
+            <option value="40"> 40 </option>
+            <option value="50"> 50 </option>
+            <option value="{{ all_keys|length }}"> {{ lang['all'] }} </option>
+        </select>
+    </form>
+</span>

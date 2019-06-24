@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["friends"]|capitalize }} </title>
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/friends.js"></script>
+
+    <!-- Additional CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/friends.css"/>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% include "elements/client_navbar.html" %}      <!-- Client navbar -->
+
+	<!-- Main body -->
+	<div class="container">
+
+        <!-- User search field -->
+        {% include "friends/user_search.html" %}
+
+        <!-- Comic list -->
+        <div class="row mt-4 mb-3">
+            <h2> {{ lang["friend_collection"] }} {{ friend.name }}</h2>
+        </div>
+
+        <hr>
+        <div class="row mb-5">
+            {% for comic in collection %}
+                <div class="col-md-2">
+                    <div class="card mt-4">
+                        {% if comic.cover and comic.cover != None %}                                     <!-- Comic picture -->
+                            <img src="data:image/png;base64,{{ comic.cover.encode('base64') }}" class="card-img-top" alt="Image">
+                        {% else %}                                                                       <!-- Default picture -->
+                            <img src="images/comic.jpg" class="card-img-top" alt="Image">
+                        {% endif %}
+
+                        <div class="card-body">
+                            <h6 class="card-title"> <!-- Comic title -->
+                                {{ comic.title }}
+                            </h6>
+                            <p class="card-text">
+                                <small> {{ lang[comic.type] }} </small> <br>     <!-- Comic type -->
+                                <small> {{ lang[comic.origin] }} </small> <br>   <!-- Comic origin -->
+                            </p>
+                        </div>
+
+                        <!-- Comic button -->
+                        <div class="card-footer text-center">
+                            <form role="form" action="/friends_ask_for" method="post">
+                                <input type="text" name="friend" value="{{ friend.key.urlsafe() }}" style="display: None">
+                                <button class="btn btn-outline-info btn-sm btn-block" type="submit" name="comic_key" value="{{ comic.key.urlsafe() }}" data-placement="bottom" data-toggle="tooltip" title="{{ lang["ask_for_comic"] }}">   <!-- Ask for comic -->
+                                    {{ lang["ask_for"] }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                <!-- End of comic -->
+                </div>
+            {% endfor %}
+        </div>
+	</div>
+	<!-- End of main body -->
+
+</body>
+</html>

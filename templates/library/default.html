@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["library_title"] }} </title>
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/library.js"></script>
+
+    <!-- Additional CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/library.css"/>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% include "elements/client_navbar.html" %}      <!-- Client navbar -->
+
+	<!-- Main body -->
+	<div class="container">
+
+        <!-- Order and search fields -->
+        {% include "library/order_filter_search.html" %}
+
+        <hr>
+
+        <!-- Filter message -->
+        {% if filter_message %}
+            {% include "library/filter_message.html" %}
+        {% endif %}
+
+        <!-- Main button -->
+        <div class="row justify-content-around">
+            <!-- Add button -->
+            <span data-toggle="tooltip" data-placement="left" title="{{ lang["add_shelving"] }}">
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#create_modal">
+                     {{ lang["add"] }} &nbsp
+                    <i class="fas fa-plus"></i>
+                </button>
+            </span>
+
+            <!-- Quit all modal -->
+            {% include "library/add.html" %}
+
+            {% if comics and comics|length > 0 %}
+                <!-- Quit page button -->
+                <span data-toggle="tooltip" data-placement="right" title="{{ lang["quit_page_tooltip"] }}">
+                    <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#quit_page_modal">
+                         {{ lang["quit_page"] }} &nbsp
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </span>
+
+                <!-- Quit all modal -->
+                {% include "library/quit_all.html" %}
+            {% endif %}
+
+            <!-- Error message -->
+            {% if error_message %}
+                <div aria-live="assertive" aria-atomic="true" style="position: relative; min-height: 200px;">
+                    {% include "library/error_snackbar.html" %}
+                </div>
+            {% endif %}
+
+            <!-- Ok message -->
+            {% if ok_message %}
+                <div aria-live="polite" aria-atomic="true">
+                    {% include "library/ok_snackbar.html" %}
+                </div>
+            {% endif %}
+        </div>
+        <hr>
+
+        <!-- Shelving list -->
+        {% if shelvings and shelvings|length > 0 %}
+            <h2> {{ lang["shelvings"] }} </h2>
+            <div class="row mt-4 mb-3">
+                {% for shelving in shelvings %}
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="row no-gutters">
+                                <div class="col-md-7">
+                                    {% if shelving.picture and shelving.picture != None %}                                            <!-- Shelving picture -->
+                                        <img src="data:image/png;base64,{{ shelving.picture.encode('base64') }}" class="card-img-top" alt="Image" height="150px">
+                                    {% else %}                                                                                      <!-- Default picture -->
+                                        <img src="../../images/shelving.jpg" class="card-img-top" alt="Image" height="150px">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title"> {{ shelving.name }} </h5>
+                                        <br>
+
+                                        <!-- Buttons -->
+                                        <div class="row justify-content-around">
+                                            <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["delete_shelving"] }}">            <!-- Delete button -->
+                                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ shelving.key.urlsafe() }}">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </span>
+                                            <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["modify_shelving"] }}">            <!-- Modify button -->
+                                                <button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#modifyModal{{ shelving.key.urlsafe() }}">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </button>
+                                            </span>
+                                            <form action="/library_see" method="get" role="form">                                                <!-- See button -->
+                                                <button type="submit" name="shelving_key" value="{{ shelving.key.urlsafe() }}" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="{{ lang["see_shelving"] }}">
+                                                    <i class="fas fa-info"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete shelving confirmation modal -->
+                    {% include "library/delete.html" %}
+
+                     <!-- Modify shelving confirmation modal -->
+                    {% include "library/modify.html" %}
+
+                {% endfor %}
+            </div>
+        {% else %}
+            <h2> {{ lang["not_shelvings_yet"] }} </h2>
+        {% endif %}
+
+
+        <!-- Elements per page and pagination -->
+        <div class="col-md-12">
+            <div class="row justify-content-between">
+
+                {% if pages and pages|length > 1 %}
+                    <!-- Pagination -->
+                    {% include "library/pagination.html" %}
+
+                    <!-- Elements per page -->
+                    {% include "library/elems_per_page.html" %}
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- User search modal -->
+        {% include "library/user_search.html" %}
+
+        <!-- Comics list (Two columns per page) -->
+        {% if comics and comics|length > 0 %}
+            <hr>
+            {% if shelving_name|length == 0 %}
+                <h2> {{ lang["comics_without_shelving"]|capitalize }} </h2>
+            {% else %}
+                <div class="row">
+                    <h2> &nbsp&nbsp{{ lang["comics_in"] }} {{ shelving_name }}: </h2> <h2 class="text-info"> &nbsp {{ comics|length }} </h2>
+                </div>
+            {% endif %}
+
+            <!-- Bottom pagination -->
+            {% if pages and pages|length > 1 %}
+            <div class="col-md-12 mt-3">
+                <div class="row justify-content-end">
+
+                    <!-- Pagination -->
+                    {% include "library/pagination.html" %}
+
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row mb-5">
+
+                <!-- Comics columns -->
+                {% for comic in comics %}
+
+                    <!-- Delete comic confirmation modal -->
+                    {% include "library/quit.html" %}
+
+                    <!-- See comic modal (form) -->
+                    {% include "library/see.html" %}
+
+                    <!-- See comic modal (form) -->
+                    {% include "library/move.html" %}
+
+                    <div class="col-md-2">
+                    <!-- Comic -->
+                        <div class="card mt-3">
+                            {% if comic.cover and comic.cover != None %}                                                    <!-- Comic picture -->
+                                <img src="data:image/png;base64,{{ comic.cover.encode('base64') }}" class="card-img-top" alt="Image">
+                            {% else %}                                                                                      <!-- Default picture -->
+                                <img src="../../images/comic.jpg" class="card-img-top" alt="Image">
+                            {% endif %}
+
+                            <div class="card-body">
+                                <h6 class="card-title"> <!-- Comic title -->
+                                    {{ comic.title }}
+                                </h6>
+                                <p class="card-text">
+                                    <small> {{ lang[comic.type] }} </small> <br>     <!-- Comic type -->
+                                    <small> {{ lang[comic.origin] }} </small> <br>   <!-- Comic origin -->
+                                </p>
+                            </div>
+
+                            <!-- Comic buttons -->
+                            <div class="card-footer text-center">
+                                <div class="row justify-content-around">
+                                    <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["quit_comic"] }}">                 <!-- Quit button -->
+                                        <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#quitModal{{ comic.key.urlsafe() }}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </span>
+
+                                    <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["see_comic"] }}">                     <!-- See button -->
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#seeModal{{ comic.key.urlsafe() }}">
+                                            <i class="fas fa-info"></i>
+                                        </button>
+                                    </span>
+
+                                    {% if comic.is_read %}
+                                        <form role="form" action="/library_unread" method="post">                                         <!-- Read comic -->
+                                            <input type="text" value="unread" name="state" style="display:none">                   <!-- Value to modify -->
+                                            <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Comics list -->
+                                            <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Comics keys that are in the current page -->
+                                            <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["read_comic"] }}">
+                                                <button type="submit" class="btn btn-light btn-sm border border-secondary" name="comic_key" value="{{ comic.key.urlsafe() }}">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </span>
+                                        </form>
+                                    {% else %}
+                                        <form role="form" action="/library_read" method="post">                                           <!-- Unread comic -->
+                                            <input type="text" value="read" name="state" style="display:none">                     <!-- Value to modify -->
+                                            <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Comics list -->
+                                            <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Comics keys that are in the current page -->
+                                            <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["unread_comic"] }}">
+                                                <button type="submit" class="btn btn-light btn-sm border border-secondary" name="comic_key" value="{{ comic.key.urlsafe() }}">
+                                                    <i class="fas fa-eye-slash"></i>
+                                                </button>
+                                            </span>
+                                        </form>
+                                    {% endif %}
+
+                                    {% if shelvings and shelvings|length > 0 %}
+                                        <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["move_comic"] }}">                     <!-- Move button -->
+                                            <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#moveModal{{ comic.key.urlsafe() }}">
+                                                <i class="fas fa-hand-rock"></i>
+                                            </button>
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    <!-- End of comic -->
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% endif %}
+        <!-- Element column -->
+
+	</div>
+    <!-- End of main body -->
+
+</body>
+</html>

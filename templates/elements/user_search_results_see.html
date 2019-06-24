@@ -1,0 +1,69 @@
+<!-- See modal -->
+<div class="modal fade bd-example-modal-lg" id="seeModal{{ comic.key.urlsafe() }}" tabindex="-1" role="dialog" aria-labelledby="See modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+                <!-- See modal header -->
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title"> {{ comic.title }} </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"> &times; </span>
+                        </button>
+                </div>
+
+                <!-- See modal body -->
+                <div class="modal-body mb-3">
+                    <div class="media">
+                        {% if comic.cover and comic.cover != None %}                                                   <!--Comic picture -->
+                            <img src="data:image/png;base64,{{ comic.cover.encode('base64') }}" class="align-self-top rounded border border-light" alt="Image" height="300" width="220">
+                        {% else %}                                                                                        <!-- Default picture -->
+                            <img src="images/comic.jpg" class="align-self-top rounded border border-light" alt="Image" height="300" width="220">
+                        {% endif %}
+
+                        <div class="media-body ml-4 mt-2">
+                            {% if comic.isbn != "" %}
+                            <p> <strong> {{ lang["isbn"] }}: </strong> {{ comic.isbn }} </p>
+                            {% endif %}
+                            {% if comic.publisher != "" %}
+                            <p> <strong> {{ lang["publisher"] }}: </strong> {{ comic.publisher }} </p>
+                            {% endif %}
+                            {% if comic.edition != "" and comic.edition > 0 %}
+                            <p> <strong> {{ lang["edition"] }}: </strong> {{ comic.edition }} </p>
+                            {% endif %}
+                            <p> <strong> {{ lang["type"] }}: </strong> {{ lang[comic.type] }} </p>
+                            {% if comic.origin != "" %}
+                            <p> <strong> {{ lang["origin"] }}: </strong> {{ lang[comic.origin] }} </p>
+                            {% endif %}
+                            {% if comic.plot != "" %}
+                            <p> <strong> {{ lang["plot"] }}: </strong> <br> {{ comic.plot }} </p>
+                            {% endif %}
+
+                            <!-- Authors -->
+                            {% if comic.authors and comic.authors|length > 0 %}
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"> {{ lang["author"] }} </th>
+                                                <th scope="col"> {{ lang["role"] }} </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for author in comic.authors %}
+                                            <tr>
+                                                <td> {{ author.author.name }} </td>
+                                                <td> {{ author.role }} </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- End of see modal body -->
+        </div>
+    </div>
+</div>
+<!-- End of see modal -->

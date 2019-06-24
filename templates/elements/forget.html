@@ -1,0 +1,61 @@
+<!-- Forget password box -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="forget">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal header -->
+            <div class="modal-header justify-content-center">
+                <h4 class="modal-title"> {{ lang["recover_password"] }} </h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body my-3">
+
+                <!-- Forget password form -->
+                <form action="/forget" method="post" role="form" id="forget_form" onsubmit="return validate_email(this)">
+
+                    <!-- Email -->
+                    <div class="form-group row">
+                        <div class="col-sm-12">                                         <!-- Email input field -->
+                            <input name="email" type="email" class="form-control" id="f_email" aria-describedby="emailHelpBlock" placeholder="{{ lang["your_email"] }}" onblur="validate_email3()">
+                            <div class="invalid-feedback">                              <!-- Error message if the email validation is wrong -->
+                                &nbsp {{ lang["needs_email"] }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12">                                         <!-- Email help text(below form field) -->
+                            <small id="emailHelpBlock" class="form-text text-primary">
+                                <em> &nbsp {{ lang["send_email"] }}  </em>
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Forget password form buttons -->
+                    <hr class="mt-4">
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-info">                          <!-- Submit button -->
+                            {{ lang["accept"] }}
+                            <i class="fas fa-check fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-outline-info" data-dismiss="modal">       <!-- Cancel button -->
+                            {{ lang["cancel"] }}
+                            <i class="fas fa-times fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-outline-info">                         <!-- Reset button -->
+                            {{ lang["restore"] }}
+                            <i class="fas fa-redo-alt fa-sm"></i>
+                        </button>
+                    </div>
+
+                </form>
+                <!-- End of sign in form -->
+
+            </div>
+            <!-- End of sign in modal body -->
+
+        </div>
+    </div>
+</div>
+<!-- End of modal -->

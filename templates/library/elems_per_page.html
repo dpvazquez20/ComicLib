@@ -1,0 +1,19 @@
+<!-- Elements per page -->
+
+
+<span data-toggle="tooltip" data-placement="right" title="{{ lang["elems_per_page"] }}">
+    <form class="form-inline" action="/collection_change_num_elems" method="post" role="form">
+        <select class="selectpicker" name="num_elems" data-width="fit" onchange="this.form.submit()" title="{{ comics|length }}">
+            <option value="12"> 12 </option>
+            <option value="24"> 24 </option>
+            <option value="36"> 36 </option>
+            <option value="48"> 48 </option>
+            <option value="60"> 60 </option>
+            {% if all_keys|length >= 10 %}
+                <option value="{{ all_keys|length }}"> {{ lang['all'] }} </option>
+            {% else %}
+                <option value="10"> {{ lang['all'] }} </option>
+            {% endif %}
+        </select>
+    </form>
+</span>

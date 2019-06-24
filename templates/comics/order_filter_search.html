@@ -1,0 +1,65 @@
+<!-- Order, search and filter fields used by the admin to simplify the search of an comic -->
+
+
+<!-- Order, search and filter fields -->
+<div class="col-md-12">
+    <div class="row justify-content-between mb-4">
+
+        <!-- Order field -->
+        <div class="mt-4">
+            <form action="/comics_order" method="post" role="form">
+                <input name="all_keys" value="{{ all_keys }}" style="display: none">        <!-- Comics list -->
+                <select name="order_by" class="selectpicker" id="order" title="{{ lang["order"] }}" onchange="this.form.submit()">
+                    <option value="title"> {{ lang["title_AZ"] }} </option>
+                    <option value="-title"> {{ lang["title_ZA"] }} </option>
+                    <option value="save_date"> {{ lang["oldest_first"] }} </option>
+                    <option value="-save_date"> {{ lang["newest_first"] }} </option>
+                    <option value="value"> {{ lang["value_ascendant"] }} </option>
+                    <option value="-value"> {{ lang["value_descendant"] }} </option>
+                </select>
+            </form>
+        </div>
+
+        <!-- Filter field -->
+        <div class="mt-4">
+            <form class="form-inline" action="/comics_filter" method="post" role="form">
+                <input name="all_keys" value="{{ all_keys }}" style="display: none">        <!-- Comics list -->
+                <select name="filter_by[]" class="selectpicker" id="filter" title="{{ lang["filter"] }}" multiple>
+                    <optgroup label="{{ lang["type"] }}" data-max-options="1">
+                        <option value="comic"> {{ lang["comic"] }} </option>
+                        <option value="manga"> {{ lang["manga"] }} </option>
+                        <option value="anthology"> {{ lang["anthology"] }} </option>
+                    </optgroup>
+                    <optgroup label="{{ lang["origin"] }}" data-max-options="1">
+                        <option value="american"> {{ lang["american"] }} </option>
+                        <option value="european"> {{ lang["european"] }} </option>
+                        <option value="other"> {{ lang["other"] }} </option>
+                    </optgroup>
+                </select>
+                <button type="submit" class="btn btn-light ml-1">
+                    <i class="fas fa-filter fa-sm text-secondary"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Search field -->
+        <div class="mt-4">
+            <form action="/comics_search" method="post" role="form">
+                <select name="search" class="selectpicker" id="{{ lang["search_not_results"] }}" data-live-search="true" title="{{ lang["search..."] }}" data-size="5">
+                    {% if all_comics and all_comics|length > 0 %}
+                        {% for comic in all_comics %}
+                            <option value="{{ comic.key.urlsafe() }}" data-tokens="{{ comic.title or comic.title|lower or comic.title|upper or comic.title|title }}">
+                                {{ comic.title }}
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <button type="submit" class="btn btn-light">
+                    <i class="fas fa-search fa-sm text-secondary"></i>
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+<!-- End of filter, order and search field -->

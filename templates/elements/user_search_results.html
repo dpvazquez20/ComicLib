@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["search_results"] }} </title>
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="../../js/comics.js"></script>
+
+    <!-- Additional CSS -->
+    <link rel="stylesheet" type="text/css" href="../../styles/comics.css"/>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% include "elements/client_navbar.html" %}      <!-- Admin navbar -->
+
+	<!-- Main body -->
+	<div class="container">
+
+        <hr class="mt-4">
+        <h2> {{ lang["search_results"] }} </h2>
+
+        <!-- Ok message -->
+        {% if ok_message %}
+            {% include "elements/ok_message.html" %}
+        {% endif %}
+		<hr>
+
+        <!-- User search modal -->
+        {% include "elements/user_search.html" %}
+
+        <!-- Comics list (Two columns per page) -->
+        {% if comics and comics|length > 0 %}
+                <div class="row">
+
+                    <!-- Comics columns -->
+                    {% for comic in comics %}
+
+                        <!-- See comic modal (form) -->
+                        {% include "elements/user_search_results_see.html" %}
+
+                        <div class="col-md-2">
+                        <!-- Comic -->
+                            <div class="card mt-2">
+                                {% if comic.cover and comic.cover != None %}                                                    <!-- Comic picture -->
+                                    <img src="data:image/png;base64,{{ comic.cover.encode('base64') }}" class="card-img-top" alt="Image">
+                                {% else %}                                                                       <!-- Default picture -->
+                                    <img src="../../images/comic.jpg" class="card-img-top" alt="Image">
+                                {% endif %}
+
+                                <div class="card-body">
+                                    <h6 class="card-title"> <!-- Comic title -->
+                                        {{ comic.title }}
+                                    </h6>
+                                    <p class="card-text">
+                                        <small> {{ lang[comic.type] }} </small> <br>     <!-- Comic type -->
+                                        <small> {{ lang[comic.origin] }} </small> <br>   <!-- Comic origin -->
+                                    </p>
+                                </div>
+
+                                <!-- Comic buttons -->
+                                <div class="card-footer text-center">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <!-- If user already added the comic show the delete button, else show the add button -->
+                                            {% if comic.owned == True %}
+                                                <form role="form" action="/home_quit" method="post">
+                                                    <button class="btn btn-outline-danger btn-sm btn-block" type="submit" name="comic_key" value="{{ comic.key.urlsafe() }}" data-placement="bottom" data-toggle="tooltip" title="{{ lang["quit_comic"] }}">   <!-- Quit comic -->
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            {% else %}
+                                                <form role="form" action="/home_add" method="post">
+                                                    <button class="btn btn-outline-info btn-sm btn-block" type="submit" name="comic_key" value="{{ comic.key.urlsafe() }}" data-placement="bottom" data-toggle="tooltip" title="{{ lang["add_comic"] }}">   <!-- Add comic -->
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <span data-placement="bottom" data-toggle="tooltip" title="{{ lang["see_comic"] }}">
+                                                <button class="btn btn-outline-primary btn-sm btn-block" type="submit" data-toggle="modal" data-target="#seeModal{{ comic.key.urlsafe() }}">  <!-- See comic -->
+                                                    <i class="fas fa-info"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- End of comic -->
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+        {% endif %}
+        <!-- Element column -->
+
+	</div>
+	<!-- End of main body -->
+
+</body>
+</html>

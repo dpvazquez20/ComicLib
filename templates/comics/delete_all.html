@@ -1,0 +1,49 @@
+<!-- Modal used by the admin to delete comics -->
+
+
+<!-- Delete modal -->
+<div class="modal fade" id="delete_page_modal" tabindex="-1" role="dialog" aria-labelledby="Delete all modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+                <!-- Delete modal header -->
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title">  {{ lang["confirmation"] }} </h4>
+                </div>
+
+                <!-- Delete modal body -->
+                <div class="modal-body my-3">
+                    <h6 class="text-center">
+                        {% if session_genre == "male" %}
+                            {{ lang["are_you_sure_all_comic_male"] }}
+                        {% elif session_genre == "female" %}
+                            {{ lang["are_you_sure_all_comic_female"] }}
+                        {% else %}
+                            {{ lang["are_you_sure_all_comic_not_defined"] }}
+                        {% endif %}
+                    </h6>
+
+                    <!-- Delete form -->
+                    <form class="form" action="/comics_delete_all" method="post" role="form">
+                        <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Comics list -->
+                        <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Comics keys that are in the current page -->
+
+                        <div class="mt-5 text-center">		<!-- Delete form buttons -->
+                            <button type="submit" class="btn btn-success" name="submit" value="do">
+                                {{ lang["accept"] }}
+                                <i class="fas fa-check fa-sm"></i>
+                            </button>
+                            <button type="reset" class="btn btn-danger" data-dismiss="modal">
+                                {{ lang["cancel"] }}
+                                <i class="fas fa-times fa-sm"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <!-- End of delete form -->
+
+                </div>
+                <!-- End of delete modal body -->
+        </div>
+    </div>
+</div>
+<!-- End of delete modal -->

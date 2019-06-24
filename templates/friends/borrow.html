@@ -1,0 +1,47 @@
+<!-- Modal used by the client to borrow comics-->
+
+
+<!-- Borrow modal -->
+<div class="modal fade" id="borrowModal{{ user.key.urlsafe() }}" tabindex="-1" role="dialog" aria-labelledby="Borrow modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+                <!-- Borrow modal header -->
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title">  {{ lang["borrow_comic"] }} </h4>
+                </div>
+
+                <!-- Borrow modal body -->
+                <div class="modal-body my-3">
+
+                    <!-- Borrow form -->
+                    <form class="form" action="/friends_borrow" id="Borrow_form" method="post" role="form">
+                        <!-- Shelving select -->
+                        <select name="comic_key" class="selectpicker border rounded border-info" data-width="100%" id="{{ lang["search_not_results"] }}" data-live-search="true" title="{{ lang["select_comic"] }}" data-size="5" required>
+                            {% for comic in comics %}
+                                <option value="{{ comic.key.urlsafe() }}" data-tokens="{{ comic.title or comic.title|lower or comic.title|upper or comic.title|title }}" data-content="{% if comic.cover and comic.cover != None %}<img src='data:image/png;base64,{{ comic.cover.encode('base64') }}' alt='Img' height='26' width='21' class='rounded'>&nbsp&nbsp&nbsp{{ comic.title }}{% else %}<img src='images/comic.jpg' alt='Img' height='26' width='21' class='rounded'>&nbsp&nbsp&nbsp{{ comic.title }}{% endif %}">
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <!-- Borrow form buttons -->
+                        <div class="mt-4 text-center">
+                            <hr>
+                            <button type="submit" class="btn btn-info" name="friend" value="{{ user.key.urlsafe() }}">
+                                {{ lang["accept"] }}
+                                <i class="fas fa-check fa-sm"></i>
+                            </button>
+                            <button type="reset" class="btn btn-outline-info" data-dismiss="modal">
+                                {{ lang["cancel"] }}
+                                <i class="fas fa-times fa-sm"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <!-- End of borrow form -->
+
+                </div>
+                <!-- End of borrow modal body -->
+        </div>
+    </div>
+</div>
+<!-- End of borrow modal -->

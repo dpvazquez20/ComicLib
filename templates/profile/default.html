@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["profile"] }} </title>
+
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/profile.js"></script>
+
+    <!-- Google charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        // Load the Visualization API and the piechart package.
+        google.load('visualization', '1.0', {'packages':['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.setOnLoadCallback(drawChart);
+
+        /* Callback that creates and populates a data table, instantiates the pie chart, passes in the data and draws it
+                ....1 = Donut chart with read and unread comics
+                ....2 = Pie chart with comics by type
+                ....3 = Donut chart with comics by origin
+         */
+        function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Name');
+            data.addColumn('number', 'Value');
+            data.addRows([
+                ['{{ lang["comics"].capitalize() }} {{ lang["read"].lower() }}', {{ statistics["read"] }}],
+                ['{{ lang["comics"].capitalize() }} {{ lang["unread"].lower() }}', {{ statistics["unread"] }}]
+            ]);
+
+            var data2 = new google.visualization.DataTable();
+            data2.addColumn('string', 'Name');
+            data2.addColumn('number', 'Value');
+            data2.addRows([
+              ['{{ lang["comic"] }}', {{ statistics["comic"] }}],
+              ['{{ lang["manga"] }}', {{ statistics["manga"] }}],
+              ['{{ lang["anthology"] }}', {{ statistics["anthology"] }}]
+            ]);
+
+            var data3 = new google.visualization.DataTable();
+            data3.addColumn('string', 'Name');
+            data3.addColumn('number', 'Value');
+            data3.addRows([
+              ['{{ lang["american"] }}', {{ statistics["american"] }}],
+              ['{{ lang["european"] }}', {{ statistics["european"] }}],
+              ['{{ lang["other"] }}',  {{ statistics["other"] }}]
+            ]);
+
+            // Set chart options
+            var options = {'title': '{{ lang["total_comics"].capitalize() }}' + ': {{ statistics["read"] + statistics["unread"] }}',
+                            'pieSliceText': 'value',
+                            'pieHole': 0.4,
+                            'width': 350,
+                            'height' :250,
+                            'colors': ['#17a2b8', '#3150ff']
+            };
+
+            var options2 = {'title': '{{ lang["comics_by_type"] }}',
+                            'pieSliceText': 'value',
+                            'width': 350,
+                            'height': 250,
+                            'colors': ['#3150ff', '#17a2b8', 'dodgerblue']
+            };
+
+            var options3 = {'title': '{{ lang["comics_by_origin"] }}',
+                            'pieSliceText': 'value',
+                            'pieHole': 0.4,
+                            'width': 350,
+                            'height': 250,
+                            'colors': ['dodgerblue', '#3150ff', '#17a2b8']
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+            chart.draw(data, options);
+            var chart2 = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart2.draw(data2, options2);
+            var chart3 = new google.visualization.PieChart(document.getElementById('donutchart2'));
+            chart3.draw(data3, options3);
+        }
+    </script>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% if session_role == 'admin' %}
+        {% include "elements/admin_navbar.html" %}      <!-- Admin navbar -->
+    {% else %}
+        {% include "elements/client_navbar.html" %}     <!-- Client navbar -->
+    {% endif %}
+	<!-- End of navbar -->
+
+	<!-- Main body -->
+	<div class="container">
+
+        <!-- Ok and error messages -->
+        {% if session_role == 'admin' %}        <!-- For the admin -->
+            <div class="mt-5">
+                <!-- Error message -->
+                {% if error_message %}
+                    {% include "elements/error_message.html" %}
+                {% endif %}
+
+                <!-- Ok message -->
+                {% if ok_message %}
+                    {% include "elements/ok_message.html" %}
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if session_role == "client" %}
+            <!-- User search modal -->
+            {% include "elements/user_search.html" %}
+        {% endif %}
+
+        <!-- Profile menu -->
+		<nav class="mt-5">
+
+			<!-- Links -->
+			<div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
+
+                {% if session_role == "client" %}   <!-- Client -->
+                    <!-- User data link -->
+                    <a class="nav-item nav-link active" id="nav-user-data-tab" data-toggle="tab" href="#nav-user-data" role="tab" aria-controls="nav-user-data" aria-selected="true" style="color:#17a2b8">
+                        {{ lang["user_data"] }}
+                    </a>
+                    <!-- Statistics link -->
+                    <a class="nav-item nav-link" id="nav-statistics-tab" data-toggle="tab" href="#nav-statistics" role="tab" aria-controls="nav-statistics" aria-selected="false" style="color:#17a2b8">
+                        {{ lang["statistics"] }}
+                    </a>
+                    <!-- About link -->
+                    <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab" aria-controls="nav-about" aria-selected="false" style="color:#17a2b8">
+                        {{ lang["about_us"] }}
+                    </a>
+                    <!-- Help link -->
+                    <a class="nav-item nav-link" id="nav-help-tab" data-toggle="tab" href="#nav-help" role="tab" aria-controls="nav-help" aria-selected="false" style="color:#17a2b8">
+                        {{ lang["help"] }}
+                    </a>
+                    <!-- Delete account link -->
+                    <a class="nav-item nav-link" id="nav-delete-account-tab" data-toggle="tab" href="#nav-delete-account" role="tab" aria-controls="nav-delete-account" aria-selected="false" style="color:#17a2b8">
+                        {{ lang["delete_account"] }}
+                    </a>
+                {% else %}                      <!-- Admin -->
+                    <!-- User data link -->
+                    <a class="nav-item nav-link active" id="nav-user-data-tab" data-toggle="tab" href="#nav-user-data" role="tab" aria-controls="nav-user-data" aria-selected="true">
+                        {{ lang["user_data"] }}
+                    </a>
+                    <!-- About link -->
+                    <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab" aria-controls="nav-about" aria-selected="false">
+                        {{ lang["about_us"] }}
+                    </a>
+                    <!-- Help link -->
+                    <a class="nav-item nav-link" id="nav-help-tab" data-toggle="tab" href="#nav-help" role="tab" aria-controls="nav-help" aria-selected="false">
+                        {{ lang["help"] }}
+                    </a>
+                    <!-- Delete account link -->
+                    <a class="nav-item nav-link" id="nav-delete-account-tab" data-toggle="tab" href="#nav-delete-account" role="tab" aria-controls="nav-delete-account" aria-selected="false">
+                        {{ lang["delete_account"] }}
+                    </a>
+                {% endif %}
+
+			</div>
+
+		</nav>
+        <!-- End of profile menu -->
+
+        <!-- Content of profile menu -->
+		<div class="row justify-content-center">
+            <div class="tab-content" id="nav-tabContent">
+
+                <!-- User data -->
+                {% include "profile/user_data.html" %}
+
+                <!-- Statistics content -->
+                {% if session_role == "client" %}
+                    {% include "profile/statistics.html" %}
+                {% endif %}
+
+                <!-- About content -->
+                {% include "profile/about.html" %}
+
+                <!-- Help content -->
+                {% include "profile/help.html" %}
+
+                <!-- Delete account content -->
+                {% include "profile/delete_account.html" %}
+
+            </div>
+        </div>
+
+	</div>
+	<!-- End of main body -->
+
+    <!-- Ok and error messages -->
+        {% if session_role == "client" %}       <!-- For the client -->
+            <!-- Error message -->
+            {% if error_message %}
+                <div aria-live="assertive" aria-atomic="true" style="position: relative; min-height: 200px;">
+                    <div style="position: absolute; bottom: 1%; right: 1%;">
+                        {% include "elements/error_toast.html" %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Ok message -->
+            {% if ok_message %}
+                <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">-->
+                    <div style="position: absolute; bottom: 1%; right: 1%;">
+                        {% include "elements/ok_toast.html" %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+
+</body>
+</html>

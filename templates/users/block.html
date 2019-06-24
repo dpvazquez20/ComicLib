@@ -1,0 +1,67 @@
+<!-- Modal used by the admin to block users -->
+
+
+<!-- Block modal -->
+<div class="modal fade" id="blockModal{{ user.key.urlsafe() }}" tabindex="-1" role="dialog" aria-labelledby="Block modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+                <!-- Block modal header -->
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title">  {{ lang["confirmation"] }} </h4>
+                </div>
+
+                <!-- Block modal body -->
+                <div class="modal-body my-3">
+
+                    <!-- Block form -->
+                    <form class="form" action="/users_block" method="post" role="form">
+                        <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Users list -->
+                        <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Users keys that are in the current page -->
+
+                        <div class="form-group">
+                            <div>
+                                <!-- Block days label -->
+                                <strong> {{ lang["block_days"] }} </strong>
+                                <!-- Block days tooltip (question icon) -->
+                                <label for="days" class="col-sm-1 col-form-label">
+                                    <span id="help">
+                                        <i class="fas fa-question-circle fa-lg ml-1 text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["block_days_tooltip"] }}"></i>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <!-- Block days input field -->
+                            <input name="days" type="number" class="form-control" min="1" max="365" aria-describedby="blockHelpBlock" placeholder="{{ lang["enter_block_days"] }}" required>
+
+                            <!-- User name help text (below user name field) -->
+                            <small id="blockHelpBlock" class="form-text text-muted">
+                                <em> &nbsp {{ lang["block_days_help_text"] }} </em>
+                            </small>
+                        </div>
+
+                        <!-- Form buttons -->
+                        <hr>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success" name="key" value="{{ user.key.urlsafe() }}">    <!-- Submit button -->
+                                {{ lang["accept"] }}
+                                <i class="fas fa-check fa-sm"></i>
+                            </button>
+                            <button type="reset" class="btn btn-danger" data-dismiss="modal">       <!-- Cancel button -->
+                                {{ lang["cancel"] }}
+                                <i class="fas fa-times fa-sm"></i>
+                            </button>
+                            <button type="reset" class="btn btn-secondary">                         <!-- Reset button -->
+                                {{ lang["restore"] }}
+                                <i class="fas fa-redo-alt fa-sm"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <!-- End of block form -->
+
+                </div>
+                <!-- End of block modal body -->
+        </div>
+    </div>
+</div>
+<!-- End of block modal -->

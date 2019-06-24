@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["borrowed_comics"]|capitalize }} </title>
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/borrowings.js"></script>
+
+    <!-- Additional CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/borrowings.css"/>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% include "elements/client_navbar.html" %}      <!-- Client navbar -->
+
+	<!-- Main body -->
+	<div class="container mb-5">
+
+        <!-- Main buttons -->
+        {% if error_message or ok_message %}
+            <div class="row justify-content-center my-4">
+
+                <!-- Error message -->
+                {% if error_message %}
+                    {% include "friends/error_snackbar.html" %}
+                {% endif %}
+
+                <!-- Ok message -->
+                {% if ok_message %}
+                    {% include "friends/ok_snackbar.html" %}
+                {% endif %}
+
+            </div>
+        {% endif %}
+
+        <!-- User search modal -->
+        {% include "library/user_search.html" %}
+
+        <!-- Own list (Two columns per page) -->
+        {% if own and own|length > 0 %}
+        <hr>
+            <h2> {{ lang["own_comics"] }} </h2>
+
+            <div class="row mb-3">
+                {% for comic in own %}
+                    <div class="col-md-2">
+                    <!-- Comic -->
+                        <div class="card mt-3">
+                            {% if comic.cover and comic.cover != None %}                                                    <!-- Comic picture -->
+                                <img src="data:image/png;base64,{{ comic.cover.encode('base64') }}" class="card-img-top" alt="Image">
+                            {% else %}                                                                       <!-- Default picture -->
+                                <img src="images/comic.jpg" class="card-img-top" alt="Image">
+                            {% endif %}
+
+                            <div class="card-body">
+                                <h6 class="card-title"> <!-- Comic title -->
+                                    {{ comic.title }}
+                                </h6>
+                                <p class="card-text">
+                                    <small class="text-info"> {{ comic.owner_name }} </small> <br>     <!-- Comic owner -->
+                                </p>
+                            </div>
+
+                            <!-- Comic buttons -->
+                            <div class="card-footer text-center">
+                                <form role="form" action="/borrowings_give_back" method="post">         <!-- Give back button -->
+                                    <input type="text" name="friend_name" value="{{ comic.owner_name }}" style="display:none;">
+                                    <input type="text" name="message" value="borrowing" style="display:none;">
+                                    <button class="btn btn-outline-info btn-sm btn-block" type="submit" name="comic_key" value="{{ comic.key.urlsafe() }}" data-placement="bottom" data-toggle="tooltip" title="{{ lang["give_back_tooltip"] }}">   <!-- Give back comic -->
+                                        {{ lang["give_back"] }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    <!-- End of comic -->
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <!-- Element column -->
+
+        <!-- Borrowed comics list (Two columns per page) -->
+        {% if borrow_comics and borrow_comics|length > 0 %}
+        <hr>
+            <h2> {{ lang["borrow_comics"] }} </h2>
+
+            <div class="row mb-3">
+                {% for comic in borrow_comics %}
+                    <div class="col-md-2">
+                    <!-- Comic -->
+                        <div class="card mt-3">
+                            {% if comic.cover and comic.cover != None %}                                                    <!-- Comic picture -->
+                                <img src="data:image/png;base64,{{ comic.cover.encode('base64') }}" class="card-img-top" alt="Image">
+                            {% else %}                                                                       <!-- Default picture -->
+                                <img src="images/comic.jpg" class="card-img-top" alt="Image">
+                            {% endif %}
+
+                            <div class="card-body">
+                                <h6 class="card-title"> <!-- Comic title -->
+                                    {{ comic.title }}
+                                </h6>
+                                <p class="card-text">
+                                    <small class="text-info"> {{ comic.owner_name }} </small> <br>     <!-- Who asked for the comic -->
+                                </p>
+                            </div>
+                        </div>
+                    <!-- End of comic -->
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <!-- Element column -->
+
+        <!-- Orders list (Two columns per page) -->
+        {% if orders and orders|length > 0 %}
+        <hr>
+            <h2> {{ lang["orders"] }} </h2>
+
+            <div class="row mb-5">
+                {% for comic in orders %}
+                    <div class="col-md-2">
+                    <!-- Comic -->
+                        <div class="card mt-3">
+                            {% if comic.cover and comic.cover != None %}                                                    <!-- Comic picture -->
+                                <img src="data:image/png;base64,{{ comic.cover.encode('base64') }}" class="card-img-top" alt="Image">
+                            {% else %}                                                                       <!-- Default picture -->
+                                <img src="images/comic.jpg" class="card-img-top" alt="Image">
+                            {% endif %}
+
+                            <div class="card-body">
+                                <h6 class="card-title"> <!-- Comic title -->
+                                    {{ comic.title }}
+                                </h6>
+                                <p class="card-text">
+                                    <small class="text-info"> {{ comic.owner_name }} </small> <br>     <!-- Comic owner -->
+                                </p>
+                            </div>
+
+                            <!-- Comic buttons -->
+                            <div class="card-footer">
+                                <form role="form" action="/borrowings_add" method="post">         <!-- Borrow button -->
+                                    <input type="text" name="friend_name" value="{{ comic.owner_name }}" style="display: none;">
+                                    <button class="btn btn-info btn-sm btn-block" type="submit" name="comic_key" value="{{ comic.key.urlsafe() }}" data-placement="bottom" data-toggle="tooltip" title="{{ lang["accept_order"] }}">   <!-- Add comic -->
+                                        {{ lang["accept"] }}
+                                    </button>
+                                </form>
+                                <form role="form" action="/borrowings_refuse" method="post">         <!-- Refuse button -->
+                                    <input type="text" name="friend_name" value="{{ comic.owner_name }}" style="display:none;">
+                                    <input type="text" name="message" value="order" style="display:none;">
+                                    <button class="btn btn-outline-info btn-sm btn-block mt-1" type="submit" name="comic_key" value="{{ comic.key.urlsafe() }}" data-placement="bottom" data-toggle="tooltip" title="{{ lang["cancel_order"] }}">   <!-- Add comic -->
+                                        {{ lang["cancel"] }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    <!-- End of comic -->
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <!-- Element column -->
+
+	</div>
+	<!-- End of main body -->
+
+</body>
+</html>

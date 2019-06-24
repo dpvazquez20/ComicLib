@@ -1,0 +1,99 @@
+<!-- Modal used by the admin to add authors to the comic -->
+
+<!-- Modal -->
+<div class="modal fade" id="addAuthorModal{{ comic.key.urlsafe() }}" tabindex="-1" role="dialog" aria-labelledby="add_author_modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title" id="CreateModalLongTitle">  <!-- Title -->
+                    {{ lang["add_author_comic"] }}
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <form method="post" action="/comics_add_author" enctype="multipart/form-data" id="add_author_form" role="form">
+                    <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Comics list -->
+                    <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Comics keys that are in the current page -->
+
+                    <!-- Author input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="author" class="col-form-label">
+                                <!-- Author label -->
+                                <strong> {{ lang["author"] }} </strong>
+                                <!-- Author tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg ml-1 text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["author_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Author select -->
+                        <select name="author" data-width="100%" data-live-search="true" class="selectpicker" id="authors" title="{{ lang["enter_author"] }}" required>
+                            {% for author in authors %}
+                                <option value="{{ author.key.urlsafe() }}" data-tokens="{{ author.name or author.name|lower or author.name|upper or author.name|title }}"> {{ author.name }} </option>
+                            {% endfor %}
+                        </select>
+
+                        <!-- Author help text (below radio buttons) -->
+                        <div class="col-sm-12">
+                            <small id="authorHelpBlock" class="form-text text-muted">
+                                <em> {{ lang["mandatory_field"] }} </em>
+                            </small>
+                        </div>
+                    </div><hr>
+
+                    <!-- Author role select -->
+                    <div class="form-group">
+                        <div>
+                            <label for="role" class="col-form-label">
+                                <!-- Role label -->
+                                <strong> {{ lang["role"] }} </strong>
+                                <!-- Role tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg ml-1 text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["role_author_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Role select -->
+                        <select name="role[]" data-width="100%" class="selectpicker" id="role" title="{{ lang["enter_role"] }}" multiple required>
+                            <option value="script"> {{ lang["script"] }} </option>
+                            <option value="drawing"> {{ lang["drawing"] }} </option>
+                            <option value="labels"> {{ lang["labels"] }} </option>
+                            <option value="inked"> {{ lang["inked"] }} </option>
+                            <option value="colors"> {{ lang["colors"] }} </option>
+                            <option value="cover"> {{ lang["cover"] }} </option>
+                            <option value="all"> {{ lang["all"] }} </option>
+                        </select>
+
+                        <!-- Role help text (below radio buttons) -->
+                        <div class="col-sm-12">
+                            <small id="roleHelpBlock" class="form-text text-muted">
+                                <em> {{ lang["mandatory_field"] }} </em>
+                            </small>
+                        </div>
+                    </div><hr>
+
+                    <!-- Form buttons -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success" name="key" value="{{ comic.key.urlsafe() }}">     <!-- Submit button -->
+                            {{ lang["accept"] }}
+                            <i class="fas fa-check fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-danger" data-dismiss="modal">       <!-- Cancel button -->
+                            {{ lang["cancel"] }}
+                            <i class="fas fa-times fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-secondary">                         <!-- Reset button -->
+                            {{ lang["restore"] }}
+                            <i class="fas fa-redo-alt fa-sm"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

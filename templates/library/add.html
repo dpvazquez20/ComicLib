@@ -1,0 +1,91 @@
+<!-- Modal used by the client to add shelving -->
+
+<!-- Modal -->
+<div class="modal fade" id="create_modal" tabindex="-1" role="dialog" aria-labelledby="create_modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title" id="CreateModalLongTitle">  <!-- Title -->
+                    {{ lang["add_shelving"] }}
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <form method="post" action="/library_add" enctype="multipart/form-data" id="add_form" role="form" onsubmit="return validate_shelving_name(this)">
+                    <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Comics list -->
+                    <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Comics keys that are in the current page -->
+
+                    <!-- Shelving name input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="name" class="col-form-label">
+                                <!-- Shelving name label -->
+                                <strong> {{ lang["name"] }} </strong>
+                                <!-- Shelving name tooltip (question icon) -->
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-info" data-toggle="tooltip" data-placement="top" title="{{ lang["name_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Shelving name input field -->
+                        <input name="name" type="text" class="form-control" id="name" aria-describedby="nameHelpBlock" maxlength="200" required placeholder="{{ lang["enter_name"] }}">
+
+                        <!-- Error message -->
+                        <div class="invalid-feedback">
+                            &nbsp {{ lang["invalid_name"] }}
+                        </div>
+
+                        <!-- Shelving name help text (below shelving name field) -->
+                        <small id="nameHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["mandatory_field"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Picture input -->
+                    <div class="form-group">
+                        <div>
+                            <!-- Picture label -->
+                            <strong> {{ lang["picture"] }} </strong>
+                            <!-- Picture tooltip (question icon) -->
+                            <label for="picture" class="col-form-label">
+                                <span id="help">
+                                    <i class="fas fa-question-circle fa-lg text-info" data-toggle="tooltip" data-placement="top" title="{{ lang["picture_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Picture input field -->
+                        <div class="custom-file">
+                            <input type="file" accept="image/*" class="custom-file-input" id="picture" name="picture" aria-describedby="pictureHelpBlock">
+                            <label class="custom-file-label" for="picture" data-browse="{{ lang["browse"] }}"> {{ lang["choose_file"] }} </label>
+                        </div>
+
+                        <!-- Picture help text (below user name field) -->
+                        <small id="pictureHelpBlock" class="form-text text-muted">
+                            <em> &nbsp {{ lang["optional_field"] }} </em>
+                        </small>
+                    </div><hr>
+
+                    <!-- Form buttons -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-info">                                     <!-- Submit button -->
+                            {{ lang["accept"] }}
+                            <i class="fas fa-check fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-outline-info" data-dismiss="modal">         <!-- Cancel button -->
+                            {{ lang["cancel"] }}
+                            <i class="fas fa-times fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-outline-info">                              <!-- Reset button -->
+                            {{ lang["restore"] }}
+                            <i class="fas fa-redo-alt fa-sm"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

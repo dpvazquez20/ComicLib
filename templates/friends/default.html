@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang={{ lang["html_lang"] }}>
+<head>
+	<title> {{ lang["friends"]|capitalize }} </title>
+    <!-- Common head -->
+    {% include "elements/head.html" %}
+
+    <!-- JavaScript files -->
+    <script language="JavaScript" type="text/javascript" src="js/friends.js"></script>
+
+    <!-- Additional CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/friends.css"/>
+</head>
+<body>
+
+	<!-- Navbar -->
+    {% include "elements/client_navbar.html" %}      <!-- Client navbar -->
+
+	<!-- Main body -->
+	<div class="container">
+
+        <!-- Main buttons -->
+        <div class="row justify-content-around my-4">
+
+            <!-- Search field -->
+            <form action="/friends_search" method="post" role="form">
+                <select name="search" class="selectpicker rounded border border-info" data-width="fit" id="{{ lang["search_not_results"] }}" data-live-search="true" title="{{ lang["search_user"] }}" data-size="10" onchange="this.form.submit()">
+                    {% if all_users and all_users|length > 0 %}
+                        {% for user in all_users %}
+                            {% if session_name != user.name %}
+                                <option value="{{ user.key.urlsafe() }}" data-tokens="{{ user.name or user.name|lower or user.name|upper or user.name|title }}" data-content="{% if user.picture and user.picture != None %}<img src='data:image/png;base64,{{ user.picture.encode('base64') }}' alt='Img' height='25' width='25' class='rounded-circle'>&nbsp&nbsp&nbsp{{ user.name }}{% else %}<img src='/images/profile.png' alt='Img' height='25' width='25' class='rounded-circle'>&nbsp&nbsp&nbsp{{ user.name }}{% endif %}">
+                                    {{ user.user }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <button type="submit" class="btn btn-outline-info">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+            </form>
+
+            <!-- Error message -->
+            {% if error_message %}
+                {% include "friends/error_snackbar.html" %}
+            {% endif %}
+
+            <!-- Ok message -->
+            {% if ok_message %}
+                {% include "friends/ok_snackbar.html" %}
+            {% endif %}
+        </div>
+        <hr>
+
+        <!-- User search modal -->
+        {% include "library/user_search.html" %}
+
+
+        <!-- Others list (Two columns per page) -->
+        {% if others and others|length > 0 %}
+        <hr>
+            <h2> {{ lang["search_results"] }} </h2>
+
+            <ul class="list unstyled mt-2 mb-5">
+                <div class="row">
+
+                    <!-- Users columns -->
+                    {% for user in others %}
+                        <div class="col-md-6">
+                            <hr>
+                            <li class="media">
+                                <!-- User picture -->
+                                {% if user.picture and user.picture != None %}                                                    <!-- User picture -->
+                                    <img src="data:image/png;base64,{{ user.picture.encode('base64') }}" class="rounded-circle border border-light mt-1" alt="{{ user.name }}" height="75" width="60">
+                                {% else %}                                                                       <!-- Default picture -->
+                                    <i class="fas fa-user fa-3x mt-1"></i>
+                                {% endif %}
+
+                                <!-- User attributes -->
+                                <div class="media-body ml-2">
+                                    <h5> {{ user.name }} </h5>
+                                </div>
+
+                                <!-- User buttons -->
+                                <div class="row justify-content-end">
+                                    <form role="form" action="/friends_add" method="post">             <!-- Accept button -->
+                                        <button type="submit" name="who_ask" value="{{ user.key.urlsafe() }}" class="btn btn-info btn-sm mr-4" data-toggle="tooltip" data-placement="top" title="{{ lang["send_request"] }}">
+                                            <i class="fas fa-plus fa-sm"> {{ lang["add"] }} </i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </ul>
+        {% endif %}
+        <!-- Element column -->
+
+
+        <!-- Friend request list (Two columns per page) -->
+        {% if requests and requests|length > 0 %}
+        <hr>
+            <h2> {{ lang["friend_requests"] }} </h2>
+
+            <ul class="list unstyled mt-2 mb-5">
+                <div class="row">
+
+                    <!-- Users columns -->
+                    {% for user in requests %}
+                        <div class="col-md-6">
+                            <hr>
+                            <li class="media">
+                                <!-- User picture -->
+                                {% if user.picture and user.picture != None %}                                                    <!-- User picture -->
+                                    <img src="data:image/png;base64,{{ user.picture.encode('base64') }}" class="rounded-circle border border-light mt-1" alt="{{ user.name }}" height="75" width="60">
+                                {% else %}                                                                       <!-- Default picture -->
+                                    <i class="fas fa-user fa-3x mt-1"></i>
+                                {% endif %}
+
+                                <!-- User attributes -->
+                                <div class="media-body ml-2">
+                                    <h5> {{ user.name }} </h5>
+                                </div>
+
+                                <!-- User buttons -->
+                                <div class="row justify-content-end">
+                                    <form role="form" action="/friends_add" method="post">             <!-- Accept button -->
+                                        <button type="submit" name="who_ask" value="{{ user.key.urlsafe() }}" class="btn btn-info btn-sm mr-1" data-toggle="tooltip" data-placement="top" title="{{ lang["accept_request"] }}">
+                                            <i class="fas fa-check fa-sm"> {{ lang["accept"] }} </i>
+                                        </button>
+                                    </form>
+                                    <form role="form" action="/friends_refuse" method="post">              <!-- Cancel button -->
+                                        <button type="submit" name="who_ask" value="{{ user.key.urlsafe() }}" class="btn btn-outline-info btn-sm mr-4" data-toggle="tooltip" data-placement="bottom" title="{{ lang["cancel_request"] }}">
+                                            <i class="fas fa-times fa-sm"> {{ lang["refuse"] }} </i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </ul>
+        {% endif %}
+        <!-- Element column -->
+
+
+        <!-- Friends list (Two columns per page) -->
+        {% if friends and friends|length > 0 %}
+            {% if requests and requests|length > 0 %}
+                <hr><hr>
+            {% endif %}
+            <h2> {{ lang["friends"]|capitalize }} </h2>
+
+            <ul class="list unstyled mt-2 mb-5">
+                <div class="row">
+
+                    <!-- Users columns -->
+                    {% for user in friends %}
+
+                        <!-- Quit friend modal -->
+                        {% include "friends/quit.html" %}
+
+                        <!-- Borrow modal -->
+                        {% include "friends/borrow.html" %}
+
+                        <div class="col-md-6">
+                            <hr>
+                            <li class="media">
+                                <!-- User picture -->
+                                {% if user.picture and user.picture != None %}                                   <!-- User picture -->
+                                    <img src="data:image/png;base64,{{ user.picture.encode('base64') }}" class="rounded-circle border border-info mt-1" alt="{{ user.name }}" height="75" width="75">
+                                {% else %}                                                                       <!-- Default picture -->
+                                    <i class="fas fa-user fa-3x mt-1"></i>
+                                {% endif %}
+
+                                <!-- User attributes -->
+                                <div class="media-body ml-2">
+                                    <h5> {{ user.name }} </h5>
+                                </div>
+
+                                <!-- User buttons -->
+                                <div class="row justify-content-end">
+                                    <span data-toggle="tooltip" data-placement="bottom" title="{{ lang["borrow_comic"] }}">               <!-- Borrow comic button -->
+                                        <button type="button" class="btn btn-outline-primary btn-md mr-1" data-toggle="modal" data-target="#borrowModal{{ user.key.urlsafe() }}">
+                                            <i class="fas fa-book-open fa-sm"></i>
+                                        </button>
+                                    </span>
+
+                                    {% if user.genre == "male" %}
+                                        <span data-toggle="tooltip" data-placement="top" title="{{ lang["quit_friend_m"] }}">
+                                    {% elif user.genre == "female" %}
+                                        <span data-toggle="tooltip" data-placement="top" title="{{ lang["quit_friend_f"] }}">
+                                    {% else %}
+                                        <span data-toggle="tooltip" data-placement="top" title="{{ lang["quit_friend_not_defined"] }}">
+                                    {% endif %}
+                                             <!-- Quit button -->
+                                            <button type="button" class="btn btn-outline-danger btn-md mr-1" data-toggle="modal" data-target="#quitModal{{ user.key.urlsafe() }}">
+                                                <i class="fas fa-trash-alt fa-sm"></i>
+                                            </button>
+                                    </span>
+
+                                    <form role="form" action="friends_see" method="post">               <!-- See button -->
+                                        <button type="submit" name="friend" value="{{ user.key.urlsafe() }}" class="btn btn-outline-info btn-md mr-4" data-toggle="tooltip" data-placement="bottom" title="{{ lang["see_collection"] }}">
+                                            <i class="fas fa-book fa-sm"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </ul>
+        {% endif %}
+        <!-- Element column -->
+
+	</div>
+	<!-- End of main body -->
+
+</body>
+</html>

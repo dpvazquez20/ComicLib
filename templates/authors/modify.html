@@ -1,0 +1,59 @@
+<!-- Modal used by the admin to modify authors -->
+
+<!-- Modal -->
+<div class="modal fade" id="modifyModal{{ author.key.urlsafe() }}" tabindex="-1" role="dialog" aria-labelledby="modify_modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title" id="CreateModalLongTitle">  <!-- Title -->
+                    {{ lang["modify_author"] }}
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <form class="form" method="post" action="/authors_modify" id="modify_form" role="form">
+                    <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Authors list -->
+                    <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Authors keys that are in the current page -->
+
+                    <!-- Author name input -->
+                    <div class="form-group">
+                        <div>
+                            <label for="modify_name" class="col-form-label">
+                                <strong> {{ lang["name"] }} </strong>    <!-- Author name label -->
+                                <span id="help">                         <!-- Author name tooltip (question icon) -->
+                                    <i class="fas fa-question-circle fa-lg text-primary" data-toggle="tooltip" data-placement="top" title="{{ lang["author_name_modify_tooltip"] }}"></i>
+                                </span>
+                            </label>
+                        </div>
+                        <!-- Author name input field -->
+                        <input name="name" type="text" class="form-control" id="modify_name" maxlength="100" aria-describedby="authorNameHelpBlock" placeholder="{{ author.name }}">
+                        <div>                                       <!-- Author name help text(below form field) -->
+                            <small id="nameHelpBlock" class="form-text text-muted">
+                                <em> &nbsp {{ lang["optional_field"] }} </em>
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Form buttons -->
+                    <hr>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success" name="key" value="{{ author.key.urlsafe() }}">    <!-- Submit button -->
+                            {{ lang["accept"] }}
+                            <i class="fas fa-check fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-danger" data-dismiss="modal">       <!-- Cancel button -->
+                            {{ lang["cancel"] }}
+                            <i class="fas fa-times fa-sm"></i>
+                        </button>
+                        <button type="reset" class="btn btn-secondary">                         <!-- Reset button -->
+                            {{ lang["restore"] }}
+                            <i class="fas fa-redo-alt fa-sm"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

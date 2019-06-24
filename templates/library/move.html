@@ -1,0 +1,68 @@
+<!-- Modal used by the client to move comics-->
+
+
+<!-- Move modal -->
+<div class="modal fade" id="moveModal{{ comic.key.urlsafe() }}" tabindex="-1" role="dialog" aria-labelledby="Move modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+                <!-- Move modal header -->
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title">  {{ lang["move_comic"] }} </h4>
+                </div>
+
+                <!-- Move modal body -->
+                <div class="modal-body my-3">
+
+                    <!-- Move form -->
+                    <form class="form" action="/library_move" id="move_form" method="post" role="form" onsubmit="check_shelving()">
+                        <input name="all_keys" value="{{ all_keys }}" style="display: none">                    <!-- Comics list -->
+                        <input name="keys_page_list" value="{{ keys_page_list }}" style="display: none">        <!-- Comics keys that are in the current page -->
+
+                        <!-- Shelving select -->
+                        <select name="shelving_key" class="selectpicker border rounded border-info" data-width="100%" id="{{ lang["search_not_results"] }}" data-live-search="true" title="{{ lang["select_shelving"] }}" data-size="10" required>
+                            {% if shelving_name|length > 0 %}
+                                <option value="None" data-tokens="{{ lang["take_out"] or lang["take_out"]|lower or lang["take_out"]|upper or lang["take_out"]|title }}">
+                                    {{ lang["take_out"] }}
+                                </option>
+                                {% for shelving in shelvings %}
+                                    {% if shelving.name != shelving_name %}
+                                        <option value="{{ shelving.key.urlsafe() }}" data-tokens="{{ shelving.name or shelving.name|lower or shelving.name|upper or shelving.name|title }}">
+                                            {{ shelving.name }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for shelving in shelvings %}
+                                    <option value="{{ shelving.key.urlsafe() }}" data-tokens="{{ shelving.name or shelving.name|lower or shelving.name|upper or shelving.name|title }}">
+                                        {{ shelving.name }}
+                                    </option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                        <div class="invalid-feedback">
+                            &nbsp {{ lang["invalid_shelving"] }}
+                        </div>
+
+
+                        <!-- Move form buttons -->
+                        <div class="mt-4 text-center">
+                            <hr>
+                            <button type="submit" class="btn btn-info" name="comic_key" value="{{ comic.key.urlsafe() }}">
+                                {{ lang["accept"] }}
+                                <i class="fas fa-check fa-sm"></i>
+                            </button>
+                            <button type="reset" class="btn btn-outline-info" data-dismiss="modal">
+                                {{ lang["cancel"] }}
+                                <i class="fas fa-times fa-sm"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <!-- End of move form -->
+
+                </div>
+                <!-- End of move modal body -->
+        </div>
+    </div>
+</div>
+<!-- End of move modal -->
