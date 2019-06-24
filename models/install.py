@@ -11,11 +11,6 @@ from handlers.lang.functions import get_default_language
 """ Method for filling up the data base """
 def install():
 
-    """INIT (sets the value to false, this means that the database is already filled up)"""
-    init = db.Install(filled_up=True)
-    init.put()
-    del init
-
     """USERS"""
     # Admin
     hash = SHA256.new()
@@ -165,3 +160,8 @@ def install():
         del choice, user
     del client, users, is_friend, comics
     time.sleep(1)
+
+    """INIT (sets the value to false, this means that the database is already filled up)"""
+    init = db.Install(filled_up=True)
+    init.put()
+    del init
