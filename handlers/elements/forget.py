@@ -55,7 +55,7 @@ class ForgetHandler(BaseHandler):
 
                 # Create the email to recuperate the password
                 message = mail.EmailMessage(
-                    sender="noreply@gmail.com",             # Email sender, it has to be a Google account
+                    sender="noreplycomiclib@gmail.com",     # Email sender, it has to be a Google account
                     subject=lang["subject"])                # Email subject
 
                 message.to = email                          # Email receiver

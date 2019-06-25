@@ -135,7 +135,7 @@ class SigninHandler(BaseHandler):
 
                             # Create a welcome email
                             message = mail.EmailMessage(
-                                sender="noreply@gmail.com",  # Email sender, it has to be a Google account
+                                sender="noreplycomiclib@gmail.com",  # Email sender, it has to be a Google account
                                 subject=lang["welcome_subject"])  # Email subject
 
                             message.to = email  # Email receiver
