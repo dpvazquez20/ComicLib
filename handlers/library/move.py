@@ -147,8 +147,12 @@ class MoveComicHandler(BaseHandler):
 
                     # Get the comics (if --> default, else --> see shelving)
                     if not self.session.get('shelving'):
-                        comics = ComicBook.query(ComicBook.key.IN(aux3)).fetch(self.session.get('num_elems_page'),offset=offset)
-                        comics = self.get_comics_read_and_without_shelving(comics)  # Get read comics and the ones that aren't in a shelving
+                        if len(aux3) > 0:
+                            comics = ComicBook.query(ComicBook.key.IN(aux3)).fetch(self.session.get('num_elems_page'),offset=offset)
+                            comics = self.get_comics_read_and_without_shelving(comics)  # Get read comics and the ones that aren't in a shelving
+                        else:
+                            comics = ComicBook.query(ComicBook.users.user == self.session.get("session_name")).fetch()
+                            comics = self.get_comics_read_and_without_shelving(comics)  # Get read comics and the ones that aren't in a shelving
                     else:
                         comics = ComicBook.query(ComicBook.users.username == self.session.get("session_name"), ComicBook.users.shelving == ndb.Key(urlsafe=self.session.get("shelving"))).fetch(self.session.get('num_elems_page'),offset=offset)
                         self.get_comics_read(comics)  # Get read comics

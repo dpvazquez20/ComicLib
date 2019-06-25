@@ -60,16 +60,7 @@ lang = {
 
     # Sign in welcome email
     "welcome_subject": "Bienvenid@ a ComicLib".decode("utf8"),
-    "welcome_mail": """ Bienvenid@ a ComicLib.\n\n
-    
-                        Desde el equipo de ComicLib le deseamos que disfrute utilizando nuestra aplicación
-                        y que pase mucho tiempo con nosotros.\n\n
-                        
-                        Si tiene cualquier duda, envíenos un correo electrónico.\n\n
-                        
-                        Un saludo,\n\n
-                        
-                        El equipo de ComicLib""".decode("utf8"),
+    "welcome_mail": """Bienvenid@ a ComicLib.\n\nDesde el equipo de ComicLib le deseamos que disfrute utilizando nuestra aplicación y que pase mucho tiempo con nosotros.\n\nSi tiene cualquier duda, envíenos un correo electrónico.\n\nUn saludo,\n\nEl equipo de ComicLib""".decode("utf8"),
 
     # Forget password modal strings
     "recover_password": "Recuperar contraseña".decode("utf8"),
@@ -79,16 +70,9 @@ lang = {
     # Forget message
     "subject": "Recuperación de contraseña",
     "greeting": "A la atención del usuario o usuaria ".decode("utf8"),
-    "body": """:\n\n          
-
-                Le enviamos una nueva contraseña para que pueda acceder a la applicación.\n
-                    \tContraseña: """.decode("utf8"),
-    "end": """\n\n
-
-                Le recomendamos que cambie su contraseña al entrar en la aplicación.\n\n
-
-                El equipo de ComicLib.
-                """.decode("utf8"),
+    "body": """:\n\nLe enviamos una nueva contraseña para que pueda acceder a la applicación.\n
+            Contraseña: """.decode("utf8"),
+    "end": """\n\nLe recomendamos que cambie su contraseña al entrar en la aplicación.\n\nEl equipo de ComicLib.""".decode("utf8"),
 
     # Home page strings
     "home": "Página de inicio".decode("utf8"),
@@ -159,10 +143,8 @@ lang = {
     "about_us": "Sobre nosotros",
     "help": "Ayuda",
     "delete_account": "Eliminar cuenta",
-    "about_us_message1": """ComicLib es una aplicación destinada a que organize su colección de tebeos de la
-                        manera en que crea conveniente.""".decode("utf8"),
-    "about_us_message2": """Desde nuestras oficinas le deseamos que disfrute usando nuestra aplicación, teniendo
-                            en cuenta respetar y no molestar a los demás.""".decode("utf8"),
+    "about_us_message1": """ComicLib es una aplicación destinada a que organize su colección de tebeos de la manera en que crea conveniente.""".decode("utf8"),
+    "about_us_message2": """Desde nuestras oficinas le deseamos que disfrute usando nuestra aplicación, teniendo en cuenta respetar y no molestar a los demás.""".decode("utf8"),
     "help_message1": "Si tiene alguna duda o problema, contacte con nosotros mediante una de estas vías:".decode("utf8"),
     "help_message2": "- Correo electrónico:".decode("utf8"),
     "help_message3": "- Teléfono:".decode("utf8"),

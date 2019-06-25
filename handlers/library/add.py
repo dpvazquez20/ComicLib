@@ -82,12 +82,15 @@ class AddShelvingHandler(BaseHandler):
                 del key
 
             # Get db comics
-            comics = ComicBook.query(ComicBook.key.IN(aux3)).fetch(self.session.get('num_elems_page'), offset=offset)
-            # Get the comics (if --> default, else --> see shelving)
-            if not self.session.get('shelving'):
-                comics = self.get_comics_read_and_without_shelving(comics)  # Get read comics and the ones that aren't in a shelving
+            if len(aux3) > 0:
+                comics = ComicBook.query(ComicBook.key.IN(aux3)).fetch(self.session.get('num_elems_page'), offset=offset)
+                # Get the comics (if --> default, else --> see shelving)
+                if not self.session.get('shelving'):
+                    comics = self.get_comics_read_and_without_shelving(comics)  # Get read comics and the ones that aren't in a shelving
+                else:
+                    self.get_comics_read(comics)  # Get read comics
             else:
-                self.get_comics_read(comics)  # Get read comics
+                comics = list()
 
             # Set the default language of the app
             if self.session['session_idiom'] == "spa":
@@ -144,7 +147,10 @@ class AddShelvingHandler(BaseHandler):
                     pages = list()  # Pages for the pagination (it's a list because of django for templates)
 
                     # Get all db comics (Limited to the number given by the session variable [10 by default])
-                    comics = ComicBook.query(ComicBook.key.IN(aux3)).order(-ComicBook.save_date).fetch(self.session.get('num_elems_page'), offset=offset)
+                    if len(aux3) > 0:
+                        comics = ComicBook.query(ComicBook.key.IN(aux3)).order(-ComicBook.save_date).fetch(self.session.get('num_elems_page'), offset=offset)
+                    else:
+                        comics = ComicBook.query().fetch()
 
                     # Setting the new keys list for the comics currently in the page (allows to use the "Delete page" button)
                     for comic in comics:

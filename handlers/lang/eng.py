@@ -60,16 +60,7 @@ lang = {
 
     # Sign in welcome email
     "welcome_subject": "Welcome to ComicLib",
-    "welcome_mail": """ Welcome to ComicLib.\n\n
-    
-                        From the ComicLib team we wish you enjoy using our application
- 						and spend a lot of time with us.\n\n
-                        
-                        If you have any questions, send us an email.\n\n
-                        
-                        Greetings,\n\n
-                        
-                        The ComicLib team""".decode("utf8"),
+    "welcome_mail": """Welcome to ComicLib.\n\nFrom the ComicLib team we wish you enjoy using our application and spend a lot of time with us.\n\nIf you have any questions, send us an email.\n\nGreetings,\n\nThe ComicLib team""".decode("utf8"),
 
     # Forget password modal strings
     "recover_password": "Recover password",
@@ -79,16 +70,9 @@ lang = {
     # Forget message
     "subject": "Recovering password",
     "greeting": "To the user's attention ",
-    "body": """:\n\n          
-
-                We send you a new password that will allow you to access the app.\n
-                    \tPassword: """.decode("utf8"),
-    "end": """\n\n
-
-                We recommend you to change your password at the moment you enter in the app.\n\n
-
-                From the ComicLib team.
-                """.decode("utf8"),
+    "body": """:\n\nWe send you a new password that will allow you to access the app.\n
+            Password: """.decode("utf8"),
+    "end": """\n\nWe recommend you to change your password at the moment you enter in the app.\n\nFrom the ComicLib team.""".decode("utf8"),
 
     # Home page strings
     "home": "Home page",

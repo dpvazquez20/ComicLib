@@ -77,12 +77,15 @@ class DeleteShelvingHandler(BaseHandler):
 
             # Get db comics
             offset = (self.session.get('current_number_page') - 1) * self.session.get('num_elems_page')
-            comics = ComicBook.query(ComicBook.key.IN(aux3)).fetch(self.session.get('num_elems_page'), offset=offset)
-            # Get the comics (if --> default, else --> see shelving)
-            if not self.session.get('shelving'):
-                comics = self.get_comics_read_and_without_shelving(comics)  # Get read comics and the ones that aren't in a shelving
+            if len(aux3) > 0:
+                comics = ComicBook.query(ComicBook.key.IN(aux3)).fetch(self.session.get('num_elems_page'), offset=offset)
+                # Get the comics (if --> default, else --> see shelving)
+                if not self.session.get('shelving'):
+                    comics = self.get_comics_read_and_without_shelving(comics)  # Get read comics and the ones that aren't in a shelving
+                else:
+                    self.get_comics_read(comics)  # Get read comics
             else:
-                self.get_comics_read(comics)  # Get read comics
+                comiss = list()
 
             # Set the default language of the app
             if self.session['session_idiom'] == "spa":
